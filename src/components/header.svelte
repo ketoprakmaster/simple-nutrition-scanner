@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
 
 	let isDark = $state(false);
 
@@ -17,10 +18,10 @@
 </script>
 
 <div class="navbar bg-base-200 shadow-md sticky top-0 z-20 p-5 justify-between">
-	<div class="flex-1 flex flex-col items-start">
-		<a href="/" class="text-xl font-bold text-primary leading-none">EatWise</a>
+	<button class="flex-1 flex flex-col items-start cursor-pointer" onclick={() => goto('/')}>
+		<span  class="text-xl font-bold text-primary leading-none">EatWise</span>
 		<span class="text-[10px] uppercase tracking-widest opacity-60">Nutrition Scanner</span>
-	</div>
+	</button>
 
 	<div>
 		<label class="swap swap-rotate px-3 items-center">
