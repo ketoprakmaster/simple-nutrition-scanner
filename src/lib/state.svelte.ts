@@ -26,6 +26,17 @@ class HistoryState {
         });
     }
 
+    async clearAll() {
+            try {
+                await db.products.clear();
+                // The liveQuery in the constructor will automatically
+                // update this._items to [] for the UI
+            } catch (err) {
+                console.error("Failed to clear history:", err);
+                this.error = "Failed to clear database";
+            }
+        }
+
     get items() {
         return this._items;
     }
