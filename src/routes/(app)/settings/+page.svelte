@@ -13,8 +13,6 @@
     }
 </script>
 
-<Header/>
-
 <main class="p-5 pb-24 max-w-md mx-auto">
     <section class="mb-8">
         <h2 class="text-sm font-semibold uppercase tracking-wider opacity-50 mb-4">Data Management</h2>
@@ -67,5 +65,3 @@
         <button class="modal-backdrop" onclick={() => showConfirm = false}>close</button>
     </div>
 {/if}
-
-<BottomNav/>

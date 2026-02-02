@@ -8,8 +8,6 @@
   let barcodeInput = $state("");
 </script>
 
-<Header />
-
 {#if history.error}
   <div class="alert alert-error mb-2 py-2 text-sm italic">{history.error}</div>
 {/if}
@@ -74,5 +72,3 @@
 	  </div>
   {/if}
 </section>
-
-<BottomNav/>
