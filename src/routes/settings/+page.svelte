@@ -1,6 +1,8 @@
 <script lang="ts">
     import { history } from '$lib/state.svelte';
     import { goto } from '$app/navigation';
+    import Header from '$components/header.svelte';
+    import BottomNav from '$components/bottom-nav.svelte';
 
     let showConfirm = $state(false);
 
@@ -11,12 +13,7 @@
     }
 </script>
 
-<div class="navbar bg-base-100 shadow-md sticky top-0 z-20 p-5">
-    <div class="flex-1 flex flex-col items-start">
-        <a href="/" class="text-xl font-bold text-primary leading-none">EatWise</a>
-        <span class="text-[10px] uppercase tracking-widest opacity-60">Settings</span>
-    </div>
-</div>
+<Header/>
 
 <main class="p-5 pb-24 max-w-md mx-auto">
     <section class="mb-8">
@@ -70,3 +67,5 @@
         <button class="modal-backdrop" onclick={() => showConfirm = false}>close</button>
     </div>
 {/if}
+
+<BottomNav/>

@@ -29,7 +29,7 @@
       {:else}
 	  <div class="grid gap-3">
 			{#each filteredHistory as item (item.code)}
-	    <a class="card card-side bg-base-100 min-h-[96px] shadow-sm border border-base-200 overflow-hidden" href="/history/{item.code}">
+	    <a class="card card-side bg-base-200 min-h-[96px] shadow-sm border border-base-200 overflow-hidden" href="/history/{item.code}">
 				<!-- image figure -->
 	      <figure class="w-20 bg-white">
 	        <img src={item.product.image_url} alt={item.product.product_name} class="object-cover" />
