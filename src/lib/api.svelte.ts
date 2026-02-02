@@ -4,32 +4,31 @@ import { history } from "./state.svelte";
 export async function getProduct(code: string | number) {
     const stringCode = String(code);
 
-    // 1. Check Cache
-    const cached = history.getById(stringCode);
+    // Check IndexedDB
+    const cached = await history.getById(stringCode);
     if (cached) {
         return goto(`/history/${stringCode}`);
     }
 
-    // 2. Fetch New
     history.loading = true;
     history.error = null;
 
     try {
+        console.log(`fetching (${stringCode})`)
         const res = await fetch(`https://world.openfoodfacts.org/api/v2/product/${stringCode}`);
         if (!res.ok) throw new Error("Network response was not ok");
 
         const data = await res.json();
 
         if (data.status === 1) {
-            history.add(data);
+            await history.add(data); // Saves to IndexedDB
             goto(`/history/${stringCode}`);
         } else {
-            history.error = "Product not found!";
+            history.error = "Product not found";
         }
 
     } catch (err) {
-        history.error = err instanceof Error ? err.message : "An error occurred";
-        console.error(err);
+        history.error = "Connection error";
 
     } finally {
         history.loading = false;

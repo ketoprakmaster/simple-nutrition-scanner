@@ -1,4 +1,5 @@
-import { browser } from '$app/environment';
+import { db } from './db';
+import { liveQuery } from 'dexie';
 
 // Define types for better DX
 export interface Product {
@@ -13,33 +14,32 @@ export interface Product {
 }
 
 class HistoryState {
-    items = $state<Product[]>(
-        browser ? JSON.parse(localStorage.getItem('scan_history') || '[]') : []
-    );
+    private _items = $state<Product[]>([]);
 
     loading = $state(false);
     error = $state<string | null>(null);
 
-    // Get an item from cache
-    getById(id: string) {
-        return this.items.find(i => i.code === id);
+    constructor() {
+        // Initialize the live observer
+        liveQuery(() => db.products.reverse().toArray()).subscribe((items) => {
+            this._items = items;
+        });
     }
 
-    add(product: Product) {
-        // Prevent duplicates in history
-        this.items = [product, ...this.items.filter(i => i.code !== product.code)];
-        this.save();
+    get items() {
+        return this._items;
     }
 
-    remove(barcode: string) {
-        this.items = this.items.filter(item => item.code !== barcode);
-        this.save();
+    async add(product: Product) {
+        await db.products.put(product);
     }
 
-    private save() {
-        if (browser) {
-            localStorage.setItem('scan_history', JSON.stringify(this.items));
-        }
+    async remove(code: string) {
+        await db.products.delete(code);
+    }
+
+    async getById(code: string) {
+        return await db.products.get(code);
     }
 }
 

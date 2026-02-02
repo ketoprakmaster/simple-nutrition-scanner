@@ -50,28 +50,31 @@
       <span class="text-base-content/50">No scans yet. Try a barcode!</span>
     </div>
   {:else}
-    <div class="grid gap-3">
-      {#each history.items.slice(0,5) as item (item.code)}
-        <a class="card card-side bg-base-100 shadow-sm border border-base-200 overflow-hidden" href="/history/{item.code}">
-          <figure class="w-20 bg-white p-2">
-            <img src={item.product.image_url} alt={item.product.product_name} class="object-contain h-full rounded-md" />
-          </figure>
-          <div class="card-body p-3 justify-between">
-            <div>
-              <h3 class="card-title text-sm line-clamp-1">{item.product.product_name}</h3>
-              <p class="text-xs opacity-60">{item.product.brands}</p>
-            </div>
+	  <div class="grid gap-3">
+			{#each history.items.slice(0,5) as item (item.code)}
+	    <a class="card card-side bg-base-100 min-h-[96px] shadow-sm border border-base-200 overflow-hidden" href="/history/{item.code}">
+				<!-- image figure -->
+	      <figure class="w-20 bg-white">
+	        <img src={item.product.image_url} alt={item.product.product_name} class="object-cover" />
+	      </figure>
+
+				<!-- item details -->
+	      <div class="card-body p-3 justify-between">
+					<div>
+            <h3 class="card-title text-sm line-clamp-1">{item.product.product_name}</h3>
+            <p class="text-xs opacity-60">{item.product.brands}</p>
           </div>
-          <div class="flex items-center pr-4">
-              <div class="avatar placeholder">
-              <div class="{gradeColors[item.product.nutriscore_grade]} text-white w-10 rounded-lg font-black shadow-lg">
-                <span>{item.product.nutriscore_grade.toUpperCase()}</span>
-              </div>
-            </div>
-          </div>
-        </a>
-      {/each}
-    </div>
+	      </div>
+
+				<!-- nutriscore -->
+	      <div class="flex flex-row gap-5 p-5 justify-center items-center">
+	        <div class="{gradeColors[item.product.nutriscore_grade]} text-white w-15 h-15 text-3xl overflow-hidden rounded-lg font-bold shadow-lg flex items-center justify-center p-2">
+	          <span>{item.product.nutriscore_grade.toUpperCase()}</span>
+	        </div>
+	      </div>
+	    </a>
+			{/each}
+	  </div>
   {/if}
 </section>
 

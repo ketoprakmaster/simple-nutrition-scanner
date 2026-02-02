@@ -23,6 +23,7 @@
 		"vite-plugin-pwa": "^1.2.0"
 	},
 	"dependencies": {
-		"@ericblade/quagga2": "^1.12.1"
+		"@ericblade/quagga2": "^1.12.1",
+		"dexie": "^4.3.0"
 	}
 }
