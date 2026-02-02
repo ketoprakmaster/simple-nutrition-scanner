@@ -1,74 +1,61 @@
 <script lang='ts'>
   import { history } from '$lib/state.svelte';
   import { getProduct } from '$lib/api.svelte';
-  import { gradeColors } from '$lib/helper.svelte';
-  import Header from '$components/header.svelte';
-  import BottomNav from '$components/bottom-nav.svelte';
+  import FoodCard from '$components/food-card.svelte';
 
   let barcodeInput = $state("");
+
+  // Derived stats to make the landing page feel more personal
+  const stats = $derived({
+    total: history.items.length,
+    healthy: history.items.filter(i => ['a', 'b'].includes(i.product.nutriscore_grade)).length,
+    recent: history.items.slice(0, 3)
+  });
 </script>
 
-{#if history.error}
-  <div class="alert alert-error mb-2 py-2 text-sm italic">{history.error}</div>
-{/if}
+<header class="bg-linear-65 from-purple-500 to-blue-700 text-primary-content px-5 pt-8 pb-12 rounded-b-[3rem] shadow-lg">
+  <h1 class="text-3xl font-black mb-2">Hello!</h1>
+  <p class="opacity-90 text-sm mb-6 font-medium">Ready to see what's inside your food today?</p>
 
-<section class="form-control p-5">
-  <div class="join w-full shadow-sm">
+  <div class="join w-full shadow-2xl overflow-hidden">
     <input
       bind:value={barcodeInput}
-      placeholder="Enter barcode..."
-      class="input input-bordered join-item w-full"
+      placeholder="Type barcode..."
+      class="input input-bordered join-item w-full text-base-content focus:outline-none"
       onkeydown={(e) => e.key === 'Enter' && getProduct(barcodeInput)}
     />
     <button
       onclick={() => getProduct(barcodeInput)}
-      class="btn btn-primary join-item"
+      class="btn btn-secondary join-item px-6"
       disabled={history.loading}
     >
       {#if history.loading}
         <span class="loading loading-spinner loading-xs"></span>
+      {:else}
+        Check
       {/if}
-      Add
     </button>
   </div>
-</section>
+</header>
 
-
-<section class="p-5">
-  <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-    Recent Scans
-  </h2>
-
-  {#if history.items.length === 0}
-    <div class="alert bg-base-200 border-none py-8 flex flex-col gap-2 py-20">
-      <span class="text-base-content/50">No scans yet. Try a barcode!</span>
+<main class="p-5 -mt-8 space-y-6">
+  <div class="grid grid-cols-2 gap-4">
+    <div class="stat bg-base-100 shadow-sm rounded-md border border-base-200 p-4">
+      <div class="stat-title text-xs uppercase font-bold">Total Scans</div>
+      <div class="stat-value text-2xl">{stats.total}</div>
     </div>
-  {:else}
-	  <div class="grid gap-3">
-			{#each history.items.slice(0,5) as item (item.code)}
-	    <a class="card card-side bg-base-200 min-h-[96px] shadow-sm border border-base-200 overflow-hidden" href="/history/{item.code}">
-				<!-- image figure -->
-	      <figure class="w-20 bg-white">
-	        <img src={item.product.image_url} alt={item.product.product_name} class="object-cover" />
-	      </figure>
+    <div class="stat bg-base-100 shadow-sm rounded-md border border-base-200 p-4">
+      <div class="stat-title text-xs uppercase font-bold">Grade A/B</div>
+      <div class="stat-value text-2xl text-success font-bold">{stats.healthy}</div>
+    </div>
+  </div>
 
-				<!-- item details -->
-	      <div class="card-body p-3 justify-between">
-					<div>
-            <h3 class="card-title text-sm line-clamp-1">{item.product.product_name}</h3>
-            <p class="text-xs opacity-60">{item.product.brands}</p>
-          </div>
-	      </div>
+  <section>
+    <div class="flex justify-between items-end mb-4 px-1">
+      <h2 class="text-lg font-bold">Latest Discoveries</h2>
+      <a href="/history" class="text-xs text-primary font-bold hover:underline">View All</a>
+    </div>
 
-				<!-- nutriscore -->
-	      <div class="flex flex-row gap-5 p-5 justify-center items-center">
-	        <div class="{gradeColors[item.product.nutriscore_grade]} text-white w-15 h-15 text-3xl overflow-hidden rounded-lg font-bold shadow-lg flex items-center justify-center p-2">
-	          <span>{item.product.nutriscore_grade.toUpperCase()}</span>
-	        </div>
-	      </div>
-	    </a>
-			{/each}
-	  </div>
-  {/if}
-</section>
+    <FoodCard items={stats.recent}/>
+  </section>
+</main>
