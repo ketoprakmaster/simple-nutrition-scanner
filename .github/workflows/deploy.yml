@@ -9,10 +9,6 @@ permissions:
   pages: write
   id-token: write
 
-concurrency:
-  group: pages
-  cancel-in-progress: true
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,13 +19,17 @@ jobs:
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: latest
 
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
+      - name: Sync SvelteKit
+        run: bunx svelte-kit sync
+
       - name: Build
+        env:
+          NODE_ENV: production
+          BASE_PATH: /${{ github.event.repository.name }}
         run: bun run build
 
       - name: Upload artifact

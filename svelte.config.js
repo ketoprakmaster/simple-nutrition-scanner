@@ -1,6 +1,8 @@
 import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
+const isProd = process.env.NODE_ENV === 'production';
+
 const config = {
 	preprocess: vitePreprocess(),
 
@@ -9,14 +11,8 @@ const config = {
 			fallback: 'index.html'
         }),
 
-        output: {
-            bundleStrategy: 'single'
-        },
-
         paths: {
-			base: process.env.NODE_ENV === 'production'
-				? '/simple-nutriscore-scanner'
-				: ''
+			base: isProd ? process.env.BASE_PATH ?? '' : '',
 		},
 
 		alias: {
