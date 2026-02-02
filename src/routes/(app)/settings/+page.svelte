@@ -1,8 +1,5 @@
 <script lang="ts">
     import { history } from '$lib/state.svelte';
-    import { goto } from '$app/navigation';
-    import Header from '$components/header.svelte';
-    import BottomNav from '$components/bottom-nav.svelte';
 
     let showConfirm = $state(false);
 

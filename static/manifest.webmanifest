@@ -1,0 +1,17 @@
+{
+  "name": "EatWise Nutrition Scanner",
+  "short_name": "EatWise",
+  "description": "Scan food barcodes to get instant nutritional data",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#570df8",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
