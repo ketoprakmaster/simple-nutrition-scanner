@@ -1,6 +1,7 @@
 <script lang='ts'>
     import { gradeColors } from '$lib/helper.svelte';
     import { history } from '$lib/state.svelte';
+
     let searchTerm = $state("");
 
     let filteredHistory = $derived(

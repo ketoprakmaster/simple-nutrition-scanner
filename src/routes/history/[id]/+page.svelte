@@ -1,8 +1,27 @@
 <script lang="ts">
     import { page } from '$app/state';
     import { history } from '$lib/state.svelte';
-    let item = history.items.find((item) => item.code === page.params.id);
+    import { getProduct } from '$lib/api.svelte';
+    import { gradeColors } from '$lib/helper.svelte';
+
+    // Reactive find: if history updates, item updates
+    let item = $derived(history.getById(page.params.id));
+
+    // Fallback: If user hits this URL directly and it's not in history, fetch it.
+    $effect(() => {
+        if (!item && !history.loading) {
+            getProduct(page.params.id);
+        }
+    });
 </script>
+
+{#if item}
+
+{:else if history.loading}
+  <div class="flex justify-center p-20"><span class="loading loading-lg"></span></div>
+{:else}
+  <div class="p-10 text-center">Product not found.</div>
+{/if}
 
 <div class="max-w-md mx-auto min-h-screen bg-base-100 p-6 pb-24">
     <a href="/history" class="btn btn-ghost btn-sm gap-2 mb-6 px-0">
