@@ -1,28 +1,15 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { settings } from '$lib/global.svelte';
+	import { theme } from '$lib/theme.svelte';
 
-	let isDark = $state(false);
-
-	onMount(() => {
-		// Sync UI with existing system/local preference on load
-		isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-	});
-
-	function toggleTheme(e: Event) {
-		const checkbox = e.target as HTMLInputElement;
-		const theme = checkbox.checked ? 'dark' : 'light';
-		document.documentElement.setAttribute('data-theme', theme);
-		localStorage.setItem('theme', theme);
-	}
 </script>
 
 <div class="navbar bg-base-200 shadow-md sticky top-0 z-20 p-5 justify-between">
   <button class="flex-1 flex flex-col items-start cursor-pointer" onclick={() => goto(resolve('/'))}>
     <span class="text-xl font-bold text-primary leading-none">{settings.appName}</span>
-    <span class="text-[10px] uppercase tracking-widest opacity-60">Nutrition Scanner</span>
+    <span class="text-[10px] uppercase tracking-widest opacity-60">Simple Nutrition Scanner</span>
   </button>
 
 	<div>
@@ -30,8 +17,8 @@
 			<input
 				type="checkbox"
 				class="theme-controller"
-				checked={isDark}
-				onchange={toggleTheme}
+				checked={theme.isDark}
+      	onchange={() => theme.toggle()}
 			/>
 
 			<svg class="swap-off h-7 w-7 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
