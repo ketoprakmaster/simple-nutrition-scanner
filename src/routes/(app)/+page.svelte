@@ -3,7 +3,8 @@
   import { getProduct } from '$lib/api.svelte';
   import { goto } from '$app/navigation';
   import FoodCard from '$components/food-card.svelte';
-    import { resolve } from '$app/paths';
+  import { resolve } from '$app/paths';
+  import { settings } from '$lib/global.svelte';
 
   let barcodeInput = $state("");
 
@@ -16,8 +17,8 @@
 </script>
 
 <header class="bg-linear-65 from-purple-500 to-blue-700 text-primary-content px-5 pt-8 pb-12 rounded-b-[3rem] shadow-lg">
-  <h1 class="text-3xl font-black mb-2">Hello!</h1>
-  <p class="opacity-90 text-sm mb-6 font-medium">Ready to see what's inside your food today?</p>
+  <h1 class="text-3xl font-black mb-2">{ settings.landingTitle }</h1>
+  <p class="opacity-90 text-sm mb-6 font-medium">{ settings.landingSubtitle }</p>
 
   <div class="join w-full shadow-2xl overflow-hidden">
     <input

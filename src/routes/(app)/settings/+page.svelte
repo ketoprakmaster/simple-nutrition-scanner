@@ -1,5 +1,6 @@
 <script lang="ts">
     import { history } from '$lib/state.svelte';
+    import { settings } from '$lib/global.svelte';
 
     let showConfirm = $state(false);
 
@@ -30,6 +31,44 @@
         </div>
     </section>
 
+    <section class='mb-8 '>
+      <h2 class="text-sm font-semibold uppercase tracking-wider opacity-50 mb-4">Personalization</h2>
+
+      <div class="bg-base-200 rounded-box border border-base-300 p-5">
+
+	      <div class="form-control w-full">
+	        <label class="label pt-0" for="app-name">
+	          <span class="label-text font-medium mb-2">App Display Name</span>
+	        </label>
+	        <input
+	          id="app-name"
+	          type="text"
+	          placeholder="e.g. Leeka"
+	          class="input input-bordered w-full"
+	          bind:value={settings.appName}
+	        />
+	      </div>
+
+				<div class="divider"></div>
+
+        <div class="space-y-2">
+        	<label class="label pt-0" for="landing-page">
+	          <span class="label-text font-medium mb-2">Landing Page Content</span>
+	        </label>
+
+          <label class="input input-sm flex items-center gap-2 h-11 w-full">
+            <span class="text-xs font-bold opacity-50 w-12 text-success">Title</span>
+            <input type="text" class="grow font-medium" bind:value={settings.landingTitle} placeholder="Hello!" />
+          </label>
+
+          <label class="input input-sm flex items-center gap-2 h-11 w-full">
+            <span class="text-xs font-bold opacity-50 w-12 text-success">Text</span>
+            <input type="text" class="grow font-medium" bind:value={settings.landingSubtitle} placeholder="Ready to scan?" />
+          </label>
+        </div>
+      </div>
+    </section>
+
     <section class="mb-8">
         <h2 class="text-sm font-semibold uppercase tracking-wider opacity-50 mb-4">About</h2>
         <div class="bg-base-200 rounded-box p-4 border border-base-300 space-y-3">
@@ -43,7 +82,7 @@
             </div>
             <div class="divider my-1"></div>
             <p class="text-xs opacity-50 leading-relaxed">
-                EatWise uses the Open Food Facts API to provide nutritional information. Data is stored locally on your device.
+                { settings.appName } <i>(simple-nutrition-scanner)</i> uses the Open Food Facts API to provide nutritional information. Data is stored locally on your device.
             </p>
         </div>
     </section>
