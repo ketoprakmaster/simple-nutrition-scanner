@@ -1,5 +1,6 @@
 import { page } from '$app/state';
 import { resolve } from '$app/paths';
+import { ui } from './alert.svelte';
 
 // Helper for Nutri-Score colors
 export const gradeColors = {
@@ -11,7 +12,7 @@ export const gradeColors = {
     unknown: 'bg-gray-300'
 };
 
-export const checkActive = (path: string) => {
+export const checkActive = (path: any | string) => {
     const resolvedPath = resolve(path);
     const currentPath = page.url.pathname;
 
@@ -20,3 +21,13 @@ export const checkActive = (path: string) => {
     }
     return currentPath.startsWith(resolvedPath);
 };
+
+export function copyToClip(text: string) {
+    navigator.clipboard.writeText(text)
+        .then(() => {
+            ui.show("success copy!" , "success")
+        })
+        .catch((err) => {
+            ui.show(err instanceof Error ? err.message : "error copying!", "error")
+        })
+}

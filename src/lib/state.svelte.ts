@@ -1,5 +1,5 @@
 import { db } from '$lib/db';
-import { ui } from '$lib/global.svelte'
+import { ui } from '$lib/alert.svelte'
 import { liveQuery } from 'dexie';
 
 // Define types for better DX
@@ -18,7 +18,6 @@ class HistoryState {
     private _items = $state<Product[]>([]);
 
     loading = $state(false);
-    error = $state<string | null>(null);
 
     constructor() {
         // Initialize the live observer
@@ -34,7 +33,6 @@ class HistoryState {
                 // update this._items to [] for the UI
             } catch (err) {
                 ui.show("Failed to clear history:", "error");
-                this.error = "Failed to clear database";
             }
         }
 

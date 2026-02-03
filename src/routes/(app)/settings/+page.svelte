@@ -1,8 +1,11 @@
 <script lang="ts">
     import { history } from '$lib/state.svelte';
     import { settings, APP_NAME, APP_VERSION, APP_ID } from '$lib/global.svelte';
+    import { copyToClip } from '$lib/helper.svelte';
+    import { logger } from '$lib/logger.svelte';
 
     let showConfirm = $state(false);
+    let showConsole = $state(false)
 
     async function handleClearAll() {
         await history.clearAll();
@@ -70,8 +73,43 @@
     </section>
 
     <section class="mb-8">
+      <h2 class="text-sm font-semibold uppercase tracking-wider opacity-50 mb-4">Log Console</h2>
+      <div class="bg-base-200 rounded-box border border-base-300 overflow-hidden">
+	     	<label class="label text-sm p-5 justify-between flex border-b-2 border-accent">
+          <span>Show Console</span>
+          <input type="checkbox" class="toggle toggle-accent" bind:checked={showConsole}/>
+        </label>
+
+        <!-- show console if toggled -->
+        {#if showConsole}
+	        <div class="h-48 overflow-y-auto p-3 font-mono text-[10px] bg-black text-green-400">
+	          {#each logger.logs as log}
+	              <div class="border-b border-white/10 py-1">{log}</div>
+	          {/each}
+	          {#if logger.logs.length === 0}
+	              <span class="opacity-30">No logs yet...</span>
+	          {/if}
+	        </div>
+        {/if}
+
+        <div class="flex divide-x divide-base-300">
+          <button
+            onclick={() => logger.copyToClipboard()}
+            class="flex-1 p-3 py-5 cursor-pointer text-xs font-bold hover:bg-base-300 transition-colors">
+            COPY TO CLIPBOARD
+          </button>
+          <button
+            onclick={() => logger.clear()}
+            class="flex-1 p-3 py-5 cursor-pointer text-xs font-bold text-error hover:bg-base-300 transition-colors">
+            CLEAR
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-8">
         <h2 class="text-sm font-semibold uppercase tracking-wider opacity-50 mb-4">About</h2>
-        <div class="bg-base-200 rounded-box p-4 border border-base-300 space-y-3">
+        <div class="bg-base-200 rounded-box p-5 border border-base-300 space-y-3">
             <div class="flex justify-between text-sm">
                 <span class="opacity-70">Version</span>
                 <span class="font-mono">{ APP_VERSION }</span>
@@ -81,10 +119,10 @@
                 <span class="font-mono text-success">IndexedDB (Active)</span>
             </div>
             <div class="flex justify-between text-sm">
-                <span class="opacity-70">App ID</span>
-                <span class="font-mono text-accent truncate">{ APP_ID }</span>
+                <span class="opacity-70 flex-none">App ID</span>
+                <button class="text-xs btn btn-xs btn-accent font-mono font-light opacity-70" onclick={() => copyToClip(APP_ID)}>click to copy</button>
             </div>
-            <div class="divider my-1"></div>
+            <div class="divider"></div>
             <p class="text-xs opacity-50 leading-relaxed">
                 { settings.appName } <i>({ APP_NAME })</i> uses the Open Food Facts API to provide nutritional information. Data is stored locally on your device.
             </p>

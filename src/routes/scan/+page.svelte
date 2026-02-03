@@ -4,12 +4,11 @@
     import Quagga from '@ericblade/quagga2';
     import { getProduct } from '$lib/api.svelte';
     import { resolve } from '$app/paths';
-    import { ui } from "$lib/global.svelte";
+    import { ui } from "$lib/alert.svelte";
     import Alert from "$components/alert.svelte"
 
     let scannerContainer: HTMLDivElement;
     let scanning = $state(false);
-    let error = $state("");
 
     onMount(() => {
         startScanner();
@@ -22,7 +21,6 @@
     function startScanner() {
         Quagga.init({
             inputStream: {
-                name  : "Live",
                 type  : "LiveStream",
                 target: scannerContainer,
                 constraints: {

@@ -1,7 +1,8 @@
 import { goto } from "$app/navigation";
 import { resolve } from "$app/paths";
 import { history } from "./state.svelte";
-import { APP_NAME, APP_VERSION, DEV_CONTACT, APP_ID, ui } from "$lib/global.svelte";
+import { ui } from "$lib/alert.svelte";
+import { APP_NAME, APP_VERSION, DEV_CONTACT, APP_ID } from "$lib/global.svelte";
 
 let isFetching = $state(false);
 
@@ -15,14 +16,14 @@ export async function getProduct(code: string | number) {
     const cached = await history.getById(stringCode);
     if (cached) {
         ui.show("Loaded from cache", "info");
-        return goto(resolve(`/history/${stringCode}`));
+        return goto(resolve("/history/[code]", {code: cached.code}));
     }
 
     isFetching = true;
     history.loading = true;
-    history.error = null;
 
     try {
+        console.log("fetching: " + stringCode)
         const response = await fetch(
             `https://world.openfoodfacts.org/api/v2/product/${stringCode}.json`,
             {
@@ -46,13 +47,12 @@ export async function getProduct(code: string | number) {
             ui.show("Product found!", "success");
 
             await history.add(data);
-            goto(resolve(`/history/${stringCode}`));
+            goto(resolve("/history/[code]", {code: data.code}));
         } else {
             ui.show("Product not found in database", "warning");
         }
 
     } catch (err) {
-        console.error("Fetch error:", err);
         ui.show(err instanceof Error ? err.message : "Connection failed", "error");
 
     } finally {
