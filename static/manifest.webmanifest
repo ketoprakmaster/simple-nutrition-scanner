@@ -1,11 +1,12 @@
 {
-  "name": "EatWise Nutrition Scanner",
-  "short_name": "EatWise",
+  "name": "Leeka",
+  "short_name": "Leeka - simple nutrition scanner",
   "description": "Scan food barcodes to get instant nutritional data",
-  "start_url": "/",
+  "start_url": ".",
+  "scope": ".",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#570df8",
+  "theme_color": "#4f46e5",
   "icons": [
     {
       "src": "favicon.svg",
