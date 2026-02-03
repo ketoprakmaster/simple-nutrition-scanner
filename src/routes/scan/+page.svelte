@@ -3,6 +3,7 @@
     import { goto } from '$app/navigation';
     import Quagga from '@ericblade/quagga2';
     import { getProduct } from '$lib/api.svelte';
+    import { resolve } from '$app/paths';
 
     let scannerContainer: HTMLDivElement;
     let scanning = $state(false);
@@ -61,7 +62,7 @@
   <!-- UI overlay -->
   <div class="relative z-10 flex h-full flex-col justify-between p-6 pointer-events-none">
     <header class="flex justify-between items-center pointer-events-auto">
-      <button onclick={() => goto('/')} class="text-white bg-black/50 p-3 cursor-pointer rounded-full hover:bg-black/70 transition-colors" aria-label="go to main page">
+      <button onclick={() => goto(resolve('/'))} class="text-white bg-black/50 p-3 cursor-pointer rounded-full hover:bg-black/70 transition-colors" aria-label="go to main page">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>

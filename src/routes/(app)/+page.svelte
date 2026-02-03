@@ -3,6 +3,7 @@
   import { getProduct } from '$lib/api.svelte';
   import { goto } from '$app/navigation';
   import FoodCard from '$components/food-card.svelte';
+    import { resolve } from '$app/paths';
 
   let barcodeInput = $state("");
 
@@ -54,7 +55,7 @@
   <section>
     <div class="flex justify-between items-end mb-4 px-1">
       <h2 class="text-lg font-bold">Latest Discoveries</h2>
-      <button onclick={() => goto('/history')} class="text-sm text-primary font-bold hover:underline cursor-pointer">
+      <button onclick={() => goto(resolve('/history'))} class="text-sm text-primary font-bold hover:underline cursor-pointer">
       <h3>View all</h3></button>
     </div>
 

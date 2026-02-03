@@ -1,4 +1,5 @@
 import { goto } from "$app/navigation";
+import { resolve } from "$app/paths";
 import { history } from "./state.svelte";
 
 export async function getProduct(code: string | number) {
@@ -7,7 +8,7 @@ export async function getProduct(code: string | number) {
     // Check IndexedDB
     const cached = await history.getById(stringCode);
     if (cached) {
-        return goto(`/history/${stringCode}`);
+        return goto(resolve(`/history/${stringCode}`));
     }
 
     history.loading = true;
@@ -22,7 +23,7 @@ export async function getProduct(code: string | number) {
 
         if (data.status === 1) {
             await history.add(data); // Saves to IndexedDB
-            goto(`/history/${stringCode}`);
+            goto(resolve(`/history/${stringCode}`));
         } else {
             history.error = "Product not found";
         }

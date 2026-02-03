@@ -2,6 +2,7 @@
 	import { gradeColors } from "$lib/helper.svelte";
 	import { history } from "$lib/state.svelte";
 	import { goto } from "$app/navigation";
+    import { resolve } from "$app/paths";
 
 	let {items, toggleDelete = false , messageEmpty = 'Nothing Here...'} = $props()
 </script>
@@ -15,7 +16,7 @@
 <div class="grid gap-3">
   {#each items as item (item.code)}
   <button class="card card-side bg-base-200 min-h-[96px] shadow-sm border border-base-200 cursor-pointer"
-  	onclick={() => goto(`/history/${item.code}`)}
+  	onclick={() => goto(resolve(`/history/${item.code}`))}
   >
 		<!-- image figure -->
     <figure class="w-20 bg-white">

@@ -3,6 +3,7 @@
     import { history } from '$lib/state.svelte';
     import { getProduct } from '$lib/api.svelte';
     import { goto } from '$app/navigation';
+    import { resolve } from '$app/paths';
 
     // 1. Create a reactive state for the item
     let item = $state<any>(null);
@@ -29,7 +30,7 @@
 </script>
 
 <div class="max-w-md mx-auto min-h-screen bg-base-100 p-6 pb-24">
-    <button onclick={() => goto('/history')} class="btn btn-ghost btn-sm gap-2 mb-6 px-0">
+    <button onclick={() => goto(resolve('/history'))} class="btn btn-ghost btn-sm gap-2 mb-6 px-0">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
         Back to History
     </button>
