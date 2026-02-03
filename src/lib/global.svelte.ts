@@ -1,3 +1,26 @@
+export type AlertType = 'success' | 'error' | 'info' | 'warning';
+
+interface Alert {
+    id: number;
+    type: AlertType;
+    message: string;
+}
+
+class AlertState {
+    private _alerts = $state<Alert[]>([]);
+
+    get items() { return this._alerts; }
+
+    show(message: string, type: AlertType = 'info', duration = 3000) {
+        const id = Date.now();
+        this._alerts.push({ id, type, message });
+
+        setTimeout(() => {
+            this._alerts = this._alerts.filter(a => a.id !== id);
+        }, duration);
+    }
+}
+
 // File: lib/global.svelte.ts
 class GlobalSettings {
     // Load from localStorage or use defaults
@@ -21,4 +44,5 @@ class GlobalSettings {
     }
 }
 
+export const ui = new AlertState();
 export const settings = new GlobalSettings();

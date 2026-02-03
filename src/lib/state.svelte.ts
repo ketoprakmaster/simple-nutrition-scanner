@@ -1,4 +1,5 @@
-import { db } from './db';
+import { db } from '$lib/db';
+import { ui } from '$lib/global.svelte'
 import { liveQuery } from 'dexie';
 
 // Define types for better DX
@@ -32,7 +33,7 @@ class HistoryState {
                 // The liveQuery in the constructor will automatically
                 // update this._items to [] for the UI
             } catch (err) {
-                console.error("Failed to clear history:", err);
+                ui.error("Failed to clear history:", "error");
                 this.error = "Failed to clear database";
             }
         }

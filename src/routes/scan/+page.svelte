@@ -4,6 +4,8 @@
     import Quagga from '@ericblade/quagga2';
     import { getProduct } from '$lib/api.svelte';
     import { resolve } from '$app/paths';
+    import { ui } from "$lib/global.svelte";
+    import Alert from "$components/alert.svelte"
 
     let scannerContainer: HTMLDivElement;
     let scanning = $state(false);
@@ -32,7 +34,7 @@
             }
         }, (err) => {
             if (err) {
-                error = "Camera access denied or not supported.";
+                ui.show("Camera Error: Please grant permissions", "error", 5000);
                 return;
             }
             Quagga.start();
@@ -46,11 +48,11 @@
                 Quagga.stop();
                 await getProduct(code);
             }
-
-
         });
     }
 </script>
+
+<Alert/>
 
 <div class="relative w-full h-dvh overflow-hidden bg-black">
   <!-- Camera layer -->
