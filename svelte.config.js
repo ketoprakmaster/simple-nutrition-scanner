@@ -11,6 +11,10 @@ const config = {
 			fallback: 'index.html'
         }),
 
+		output: {
+		    bundleStrategy: 'single'
+		},
+
         paths: {
 			base: isProd ? process.env.BASE_PATH ?? '' : '',
 		},
