@@ -1,6 +1,6 @@
 <script lang="ts">
     import { history } from '$lib/state.svelte';
-    import { settings } from '$lib/global.svelte';
+    import { settings, APP_NAME, APP_VERSION, APP_ID } from '$lib/global.svelte';
 
     let showConfirm = $state(false);
 
@@ -74,15 +74,19 @@
         <div class="bg-base-200 rounded-box p-4 border border-base-300 space-y-3">
             <div class="flex justify-between text-sm">
                 <span class="opacity-70">Version</span>
-                <span class="font-mono">1.0.0-pwa</span>
+                <span class="font-mono">{ APP_VERSION }</span>
             </div>
             <div class="flex justify-between text-sm">
                 <span class="opacity-70">Database</span>
                 <span class="font-mono text-success">IndexedDB (Active)</span>
             </div>
+            <div class="flex justify-between text-sm">
+                <span class="opacity-70">App ID</span>
+                <span class="font-mono text-accent truncate">{ APP_ID }</span>
+            </div>
             <div class="divider my-1"></div>
             <p class="text-xs opacity-50 leading-relaxed">
-                { settings.appName } <i>(simple-nutrition-scanner)</i> uses the Open Food Facts API to provide nutritional information. Data is stored locally on your device.
+                { settings.appName } <i>({ APP_NAME })</i> uses the Open Food Facts API to provide nutritional information. Data is stored locally on your device.
             </p>
         </div>
     </section>

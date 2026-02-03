@@ -33,7 +33,7 @@ class HistoryState {
                 // The liveQuery in the constructor will automatically
                 // update this._items to [] for the UI
             } catch (err) {
-                ui.error("Failed to clear history:", "error");
+                ui.show("Failed to clear history:", "error");
                 this.error = "Failed to clear database";
             }
         }
