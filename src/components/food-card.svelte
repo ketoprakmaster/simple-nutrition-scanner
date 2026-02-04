@@ -8,8 +8,8 @@
 </script>
 
 {#if items.length === 0}
-  <div class="flex flex-col items-center justify-center p-12 border-2 border-dashed border-base-300 rounded-3xl opacity-40">
-    <p class="text-sm italic font-medium">{messageEmpty}</p>
+  <div class="flex flex-col items-center justify-center p-12 border-2 border-dashed border-base-300 bg-base-200 rounded-md">
+    <p class="text-sm italic font-light text-base-content/50">{messageEmpty}</p>
   </div>
 {:else}
   <div class="flex flex-col gap-3">
@@ -44,7 +44,7 @@
                   e.stopPropagation(); // Prevents the click from bubbling to the <a>
                   history.remove(item.product.id);
               }}
-              class="btn btn-ghost btn-circle btn-sm bg-error/10 text-error"
+              class="btn btn-circle btn-ghost bg-error/5 btn-md text-error"
               aria-label="Delete item"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

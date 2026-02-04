@@ -2,7 +2,7 @@
 import { build, files, version } from '$service-worker';
 
 const CACHE = `cache-${version}`;
-const ASSETS = [...build, ...files];
+const ASSETS = [...build, ...files, '/'];
 
 self.addEventListener('install', (event) => {
 	async function addFilesToCache() {
@@ -22,28 +22,37 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-	if (event.request.method !== 'GET') return;
+    if (event.request.method !== 'GET') return;
 
-	async function respond() {
-		const url = new URL(event.request.url);
-		const cache = await caches.open(CACHE);
+    async function respond() {
+        const url = new URL(event.request.url);
+        const cache = await caches.open(CACHE);
 
-		// Always try the cache for internal assets
-		if (ASSETS.includes(url.pathname)) {
-			return cache.match(url.pathname) as Promise<Response>;
-		}
+        if (ASSETS.includes(url.pathname)) {
+            const cachedResponse = await cache.match(url.pathname);
+            if (cachedResponse) return cachedResponse;
+        }
 
-		// For everything else, try network, then fallback to cache
-		try {
-			const response = await fetch(event.request);
-			if (response.status === 200) {
-				cache.put(event.request, response.clone());
-			}
-			return response;
-		} catch {
-			return cache.match(event.request) as Promise<Response>;
-		}
-	}
+        if (event.request.mode === 'navigate') {
+            try {
+                return await fetch(event.request);
+            } catch {
+                return cache.match('/');
+            }
+        }
 
-	event.respondWith(respond());
+        try {
+            const response = await fetch(event.request);
+            if (response.ok) cache.put(event.request, response.clone());
+            return response;
+        } catch (err) {
+            const cachedResponse = await cache.match(event.request);
+            if (cachedResponse) return cachedResponse;
+
+            // Fallback for specific missing data if needed
+            return new Response("Offline and data not cached.", { status: 404 });
+        }
+    }
+
+    event.respondWith(respond());
 });

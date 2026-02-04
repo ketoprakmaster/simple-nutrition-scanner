@@ -43,11 +43,11 @@
 
 <main class="p-5 -mt-8 space-y-6">
   <div class="grid grid-cols-2 gap-4">
-    <div class="stat bg-base-100 shadow-sm rounded-md border border-base-200 p-4">
+    <div class="stat bg-base-200 shadow-sm rounded-md border border-base-200 p-4">
       <div class="stat-title text-xs uppercase font-bold">Total Scans</div>
       <div class="stat-value text-2xl">{stats.total}</div>
     </div>
-    <div class="stat bg-base-100 shadow-sm rounded-md border border-base-200 p-4">
+    <div class="stat bg-base-200 shadow-sm rounded-md border border-base-200 p-4">
       <div class="stat-title text-xs uppercase font-bold">Grade A/B</div>
       <div class="stat-value text-2xl text-success font-bold">{stats.healthy}</div>
     </div>
