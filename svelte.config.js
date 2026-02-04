@@ -16,6 +16,7 @@ const config = {
 		},
 
         paths: {
+            relative: false,
 			base: isProd ? process.env.BASE_PATH ?? '' : '',
 		},
 
