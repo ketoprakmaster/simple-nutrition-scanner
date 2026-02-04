@@ -13,7 +13,7 @@
   const activeIndex = $derived(navItems.findIndex(item => checkActive(item.path)));
 </script>
 
-<nav class="fixed bottom-0 left-0 right-0 bg-base-200/80 backdrop-blur-xl border-t border-base-300 z-50 pb-safe">
+<nav class="fixed bottom-0 left-0 right-0 bg-base-200/80 backdrop-blur-xl border-t-2 border-base-300 z-50 pb-safe">
   <div class="grid grid-cols-3 h-16 items-center relative">
 
     {#if activeIndex !== -1 && !navItems[activeIndex].isCenter}

@@ -6,7 +6,7 @@
 
 </script>
 
-<div class="navbar bg-base-200 shadow-md sticky top-0 z-20 p-5 justify-between">
+<div class="navbar bg-base-200 shadow-md sticky top-0 z-20 p-5 justify-between border-b-2 border-base-300">
   <button class="flex-1 flex flex-col items-start cursor-pointer" onclick={() => goto(resolve('/'))}>
     <span class="text-xl font-bold text-primary leading-none">{settings.appName}</span>
     <span class="text-[10px] uppercase tracking-widest opacity-60">Simple Nutrition Scanner</span>

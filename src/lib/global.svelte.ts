@@ -12,8 +12,6 @@ class GlobalSettings {
     constructor() {
         $effect.root(() => {
             $effect(() => {
-                console.log(`saving GlobalSettings`)
-
                 localStorage.setItem('app_name', this.appName);
                 localStorage.setItem('show_nutriscore', String(this.showNutriscoreOnCards));
                 localStorage.setItem('landing_title', String(this.landingTitle));
