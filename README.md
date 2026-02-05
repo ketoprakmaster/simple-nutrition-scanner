@@ -1,6 +1,8 @@
 
 # Simple Nutrition Scanner
 
+<img width="3063" height="1003" alt="bitmap" src="https://github.com/user-attachments/assets/f4693e5d-7f6f-45d9-93cc-b995a40658eb" />
+
 A Yuka-like progressive web app (PWA) that scans food barcodes and provides nutrition information. This app is built with SvelteKit and uses the Quagga2 library for barcode scanning.
 
 ## Features
