@@ -29,6 +29,7 @@
 	},
 	"dependencies": {
 		"@ericblade/quagga2": "^1.12.1",
-		"dexie": "^4.3.0"
+		"dexie": "^4.3.0",
+		"workbox-core": "^7.4.0"
 	}
 }
