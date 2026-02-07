@@ -1,7 +1,7 @@
 import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
-const isProd = process.env.NODE_ENV === 'production';
+const BASE_PATH = process.env.BASE_PATH ?? '';
 
 const config = {
 	preprocess: vitePreprocess(),
@@ -17,7 +17,7 @@ const config = {
 
         paths: {
             relative: false,
-			base: isProd ? process.env.BASE_PATH ?? '' : '',
+			base:  BASE_PATH,
 		},
 
 		alias: {
