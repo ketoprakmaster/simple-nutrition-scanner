@@ -3,13 +3,14 @@
 /// <reference lib="webworker" />
 /// <reference types="@sveltejs/kit" />
 
-import { build, files, version, prerendered } from '$service-worker';
+import { build, files, version, prerendered, base } from '$service-worker';
 import { precacheAndRoute, cleanupOutdatedCaches, createHandlerBoundToURL } from 'workbox-precaching';
 import { registerRoute, NavigationRoute } from 'workbox-routing';
 
 const self = globalThis.self as unknown as ServiceWorkerGlobalScope;
 
-const SHELL = '/';
+// Resolve the SHELL URL
+const SHELL = prerendered.find(p => p === base || p === `${base}/` || p.endsWith('index.html')) || '/';
 
 // Ignored Files:
 const IGNORED_FILES = [
@@ -37,7 +38,13 @@ precacheAndRoute(manifest);
 cleanupOutdatedCaches();
 
 // SHELL fallback logic
-registerRoute(new NavigationRoute(createHandlerBoundToURL(SHELL)));
+try {
+    registerRoute(new NavigationRoute(
+        createHandlerBoundToURL(SHELL)
+));
+} catch (error) {
+	console.error('Workbox NavigationRoute failed. Falling back to manual shell.', error);
+}
 
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', (event) => {
