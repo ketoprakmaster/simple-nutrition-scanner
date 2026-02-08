@@ -1,4 +1,4 @@
-import { db } from '$lib/db';
+import { db } from '$lib/config/db';
 import { ui } from '$lib/alert.svelte'
 import { liveQuery } from 'dexie';
 
@@ -48,7 +48,7 @@ class HistoryState {
         await db.products.delete(code);
     }
 
-    async getById(code: string) {
+    async getById(code: string | undefined) {
         return await db.products.get(code);
     }
 }

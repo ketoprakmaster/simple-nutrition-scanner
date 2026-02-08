@@ -6,16 +6,15 @@ import { APP_NAME, APP_VERSION, DEV_CONTACT, APP_ID } from "$lib/global.svelte";
 
 let isFetching = $state(false);
 
-export async function getProduct(code: string | number) {
-    const stringCode = String(code).trim();
-
+export async function getProduct(code: string | number | undefined) {
     // Prevent empty scans or concurrent identical requests
+    const stringCode = String(code).trim();
     if (!stringCode || isFetching) return;
 
     // Check Cache First
     const cached = await history.getById(stringCode);
     if (cached) {
-        ui.show("Loaded from cache", "info");
+        ui.show("Already in Database", "info");
         return goto(resolve("/history/[code]", {code: cached.code}));
     }
 
