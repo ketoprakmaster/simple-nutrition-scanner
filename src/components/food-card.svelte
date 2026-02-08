@@ -19,7 +19,7 @@
         class="group relative flex items-center bg-base-200 rounded-md p-3 shadow-sm border border-base-200 active:scale-[0.98] transition-all hover:border-primary/30"
       >
         <div class="relative h-20 w-20 min-w-20 overflow-hidden rounded-md bg-slate-50 flex items-center justify-center">
-          <img src={item.product.image_url} alt={item.product.product_name} class="h-full w-full object-cover mix-blend-multiply" />
+          <img src={item.product.image_url} alt={item.product.product_name} class="h-full w-full object-cover mix-blend-multiply" crossorigin="anonymous"/>
         </div>
 
         <div class="flex-1 px-4 overflow-hidden text-left">

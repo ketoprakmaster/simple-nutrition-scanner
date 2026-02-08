@@ -5,28 +5,26 @@
     import { goto } from '$app/navigation';
     import { resolve } from '$app/paths';
 
-    // 1. Create a reactive state for the item
+
     let item = $state<any>(null);
     let isNotFound = $state(false);
-    // 2. Reactively fetch when the ID in the URL changes
-    $effect(() => {
-        const loadProduct = async () => {
-            // Check cache/DB
-            const data = await history.getById(page.params.id);
 
-            if (data) {
-                item = data;
-            } else {
-                // If not in DB, try to fetch it from API
-                await getProduct(page.params.id);
-                // Try getting it one more time after API call
-                item = await history.getById(page.params.id);
-                if (!item) isNotFound = true;
-            }
-        };
+    const loadProduct = async () => {
+        // Check cache/DB
+        const data = await history.getById(page.params.id);
 
-        loadProduct();
-    });
+        if (data) {
+            item = data;
+        } else {
+            // If not in DB, try to fetch it from API
+            await getProduct(page.params.id);
+            // Try getting it one more time after API call
+            item = await history.getById(page.params.id);
+            if (!item) isNotFound = true;
+        }
+    };
+
+    loadProduct();
 </script>
 
 <div class="max-w-md mx-auto min-h-screen bg-base-100 p-6 pb-24">
@@ -37,7 +35,7 @@
 
     {#if item}
     		<!-- product image -->
-        <img src={item.product.image_url} alt={item.product.product_name} class="w-full h-full object-cover card mb-5" />
+        <img src={item.product.image_url} alt={item.product.product_name} class="w-full h-full object-cover card mb-5" crossorigin="anonymous" />
 
         <!-- product details -->
         <h1 class="text-2xl font-bold mb-2">{item.product.product_name}</h1>
@@ -52,6 +50,7 @@
                 src="https://static.openfoodfacts.org/images/attributes/dist/nutriscore-{item.product.nutriscore_grade}.svg"
                 alt="Nutri-Score"
                 class="h-12"
+                crossorigin="anonymous"
               />
             </div>
           </div>
