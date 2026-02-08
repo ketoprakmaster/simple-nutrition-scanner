@@ -1,13 +1,15 @@
 {
-  "name": "Leeka - simple nutrition scanner",
+  "id": "simple-nutrition-scanner",
+  "name": "Leeka - PWA",
   "short_name": "Leeka",
   "description": "Scan food barcodes to get instant nutritional data",
+  "categories": ["food"],
   "start_url": ".",
   "scope": ".",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#ffffff",
-  "theme_color": "#4f46e5",
+  "background_color": "#824bfb",
+  "theme_color": "#824bfb",
   "icons": [
       {
         "src": "icons/pwa-64x64.png",
