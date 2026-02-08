@@ -1,12 +1,13 @@
 {
 	"name": "svelte-latest",
 	"private": true,
-	"version": "1.1.3-pwa",
+	"version": "1.1.4-pwa",
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
+		"preview:serve": "cross-env BASE_PATH='/myapp' && bun run build && bun run preview",
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -19,17 +20,18 @@
 		"@sveltejs/vite-plugin-svelte": "^6.2.1",
 		"@tailwindcss/vite": "^4.1.18",
 		"@vite-pwa/assets-generator": "^1.0.2",
+		"cross-env": "^10.1.0",
 		"daisyui": "^5.5.17",
 		"svelte": "^5.45.6",
 		"svelte-check": "^4.3.4",
 		"tailwindcss": "^4.1.18",
 		"typescript": "^5.9.3",
-		"vite": "^7.2.6",
-		"vite-plugin-pwa": "^1.2.0"
+		"vite": "^7.2.6"
 	},
 	"dependencies": {
 		"@ericblade/quagga2": "^1.12.1",
 		"dexie": "^4.3.0",
-		"workbox-core": "^7.4.0"
+		"workbox-core": "^7.4.0",
+		"workbox-precaching": "^7.4.0"
 	}
 }
