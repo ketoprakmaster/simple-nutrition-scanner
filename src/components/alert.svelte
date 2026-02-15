@@ -18,7 +18,7 @@
     };
 </script>
 
-<div class="fixed top-4 left-1/2 -translate-x-1/2 z-20 w-full max-w-sm px-4 space-y-2 pointer-events-none">
+<div class="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-full max-w-sm px-4 space-y-2 pointer-events-none">
     {#each ui.items as alert (alert.id)}
         <div
             animate:flip={{ duration: 300 }}
