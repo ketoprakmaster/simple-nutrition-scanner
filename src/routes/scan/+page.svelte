@@ -7,23 +7,27 @@
     import { getProduct } from '$lib/api.svelte';
     import { ui } from "$lib/alert.svelte";
     import Alert from "$components/alert.svelte";
+    import { get } from 'svelte/store';
 
     let scannerContainer: HTMLDivElement;
-    let isFetching = $state(false);
-    let isLocked = false;
+    let isLocked = $state(false);
 
     onMount(() => {
         initScanner();
     });
 
     onDestroy(() => {
-        Quagga.offDetected(handleDetected);
-        Quagga.stop()
+        stopScanner()
     });
 
+    function stopScanner() {
+        Quagga.offDetected(handleDetected);
+        Quagga.stop()
+    }
+
     function initScanner() {
-        isLocked = false;
-        scannerConfig.inputStream.target = scannerContainer;
+        if (!scannerContainer) return;
+        scannerConfig.inputStream!.target = scannerContainer;
 
         Quagga.init(scannerConfig, (err) => {
             if (err) {
@@ -39,43 +43,43 @@
     async function handleDetected(data: any) {
         const code = data.codeResult?.code;
 
-        if (!code || isFetching || isLocked) return;
+        if (!code || isLocked) return;
 
         isLocked = true;
-        isFetching = true;
+        stopScanner()
 
-        Quagga.offDetected(handleDetected);
-        Quagga.stop();
-
-        setTimeout(async () => {
-            try {
-                // throw new Error("test");
-                await getProduct(code)
-            } catch (e) {
-                isFetching = false;
-                initScanner();
-            }
-        }, 500);
+        try {
+            // throw new Error("mock test")
+            await getProduct(code)
+        } catch (err) {
+            ui.show(err instanceof Error ? err.message : "error in handle detected", "error");
+        } finally {
+            isLocked = false;
+            initScanner();
+        }
     }
 </script>
 
 <Alert/>
 
 <div class="relative w-full h-dvh overflow-hidden bg-black">
+		<!-- scanner container -->
     <div
         bind:this={scannerContainer}
         class="absolute inset-0 z-0 scanner-container transition-all duration-500"
-        class:blur-xl={isFetching}
-        class:opacity-50={isFetching}
+        class:blur-xl={isLocked}
+        class:opacity-50={isLocked}
     ></div>
 
-    {#if isFetching}
+    <!-- loading -->
+    {#if isLocked}
         <div class="absolute inset-0 z-15 flex flex-col items-center justify-center bg-black/20 backdrop-blur-sm">
             <span class="loading loading-ring loading-lg text-primary"></span>
             <p class="text-white mt-4 font-medium tracking-wide">Fetching product data...</p>
         </div>
     {/if}
 
+    <!-- scanner overlay -->
     <div class="relative z-10 flex h-full flex-col justify-between p-6 pointer-events-none">
         <header class="flex justify-between items-center pointer-events-auto">
             <button onclick={() => goto(resolve('/'))} aria-label="close scanner, goto home" class="btn btn-circle btn-ghost bg-black/40 text-white border-none">
@@ -87,15 +91,17 @@
             <div class="w-12"></div>
         </header>
 
-        <div class="relative w-64 h-48 mx-auto border-2 border-primary/50 rounded-lg shadow-[0_0_0_9999px_rgba(0,0,0,0.6)]">
-            {#if !isFetching}
-                <div class="absolute inset-x-0 top-0 h-1 bg-primary shadow-[0_0_15px_#570df8] animate-scan-move"></div>
-            {/if}
+        <div class="flex-1 py-20 px-10">
+	        <div class="relative h-full border-2 border-primary/50 rounded-lg shadow-[0_0_0_9999px_rgba(0,0,0,0.6)]">
+	            {#if !isLocked}
+	                <div class="absolute inset-x-0 top-0 h-1 bg-primary shadow-[0_0_15px_#570df8] animate-scan-move"></div>
+	            {/if}
+	        </div>
         </div>
 
         <div class="text-center pb-12 pointer-events-auto">
             <p class="text-white/90 text-sm bg-black/60 backdrop-blur-md py-2 px-6 rounded-full inline-block border border-white/10">
-                {isFetching ? 'Processing...' : 'Center the barcode within the box'}
+                {isLocked ? 'Processing...' : 'Center the barcode within the box'}
             </p>
         </div>
     </div>
