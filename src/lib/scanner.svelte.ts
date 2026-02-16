@@ -3,26 +3,29 @@ import { scannerConfig } from '$lib/config/scanner';
 import { ui } from '$lib/alert.svelte';
 import { getProduct } from '$lib/api.svelte';
 
+/** class for managing the camera/scanner components lifecycle and functionality */
 export class ScannerManager {
     isActive = $state(false);
     isLocked = $state(false);
 
     async #handleDetected(data: any) {
         const code = data.codeResult?.code;
-        if (!code || this.isLocked) return;
+        if (!code || this.isLocked || !this.isActive) return;
 
         this.isLocked = true;
         this.#pauseScanning();
 
         try {
-            // throw new Error("mock test code:" + code)
+            // throw new Error("mock test code: " + code)
             await getProduct(code);
         } catch (err) {
             ui.show(err instanceof Error ? err.message : "Scan Error", "error");
-            // If it failed, restart scanning automatically
-            this.#resumeScanning();
         } finally {
-            this.isLocked = false;
+            // extra guard
+            if (this.isActive) {
+                this.isLocked = false;
+                this.#resumeScanning();
+            }
         }
     }
 
@@ -38,13 +41,13 @@ export class ScannerManager {
             src: src,
             inputStream: { size: 800 } // Helps with high-res mobile photos
         }, async (result) => {
-            const code = result.codeResult?.code;
+            const code = result?.codeResult?.code;
 
             if (code) {
                 try {
                     await getProduct(code);
                 } catch (err) {
-                    ui.show("Product not found in image", "warning");
+                    ui.show(err instanceof Error ? err.message : "Scan Error", "error");
                 } finally {
                     this.isLocked = false;
                 }
@@ -61,6 +64,7 @@ export class ScannerManager {
     }
 
     #resumeScanning() {
+        if (!this.isActive) return
         Quagga.onDetected((data) => this.#handleDetected(data));
     }
 
