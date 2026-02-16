@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Header from '$components/header.svelte';
+	import Header from '$components/header/header.svelte';
 	import BottomNav from '$components/bottom-nav.svelte';
 	import Alert from '$components/alert.svelte'
 	import { page } from '$app/state';
