@@ -4,9 +4,10 @@ import { ui } from '$lib/alert.svelte';
 import { getProduct } from '$lib/api.svelte';
 
 /** class for managing the camera/scanner components lifecycle and functionality */
-export class ScannerManager {
-    isActive = false;
-    isLocked = false;
+class ScannerManager {
+    isActive = $state(false);
+    isLocked = $state(false);
+    #detectedHandler = (data:any) => this.#handleDetected(data);
 
     async #handleDetected(data: any) {
         const code = data.codeResult?.code;
@@ -59,17 +60,18 @@ export class ScannerManager {
         });
     }
 
-    #pauseScanning() {
-        Quagga.offDetected();
+    #resumeScanning() {
+        if (!this.isActive) return;
+        Quagga.onDetected(this.#detectedHandler);
     }
 
-    #resumeScanning() {
-        if (!this.isActive) return
-        Quagga.onDetected((data) => this.#handleDetected(data));
+    #pauseScanning() {
+        Quagga.offDetected(this.#detectedHandler);
     }
 
     start(target: HTMLElement) {
         if (this.isActive) return;
+        console.log("starting stream")
 
         const config = { ...scannerConfig, inputStream: { ...scannerConfig.inputStream, target } };
 
@@ -86,6 +88,7 @@ export class ScannerManager {
     }
 
     stop() {
+        console.log("stopping stream")
         Quagga.offDetected();
         Quagga.stop();
         this.isActive = false;
@@ -102,3 +105,5 @@ export class ScannerManager {
         }
     }
 }
+
+export const Scanner = new ScannerManager();

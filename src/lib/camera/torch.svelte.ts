@@ -1,7 +1,7 @@
 import { ui } from "$lib/alert.svelte";
 import Quagga from "@ericblade/quagga2";
 
-export class ToggleTorch {
+class ToggleTorch {
     // Use the $state rune for reactive UI updates
     torchEnabled = $state(false);
 
@@ -19,7 +19,7 @@ export class ToggleTorch {
             this.torchEnabled = true;
         } catch (error) {
             this.torchEnabled = false;
-            ui.show(`Torch error: ${error}`, "error");
+            this.#handleError(error);
         }
     }
 
@@ -29,7 +29,14 @@ export class ToggleTorch {
             this.torchEnabled = false;
         } catch (error) {
             this.torchEnabled = false;
-            console.error(error);
+            this.#handleError(error);
         }
     }
+
+    async #handleError(error: any) {
+        console.error('Torch control failed:', error);
+        ui.show('Torch not available on this device',"error");
+    }
 }
+
+export const Torch = new ToggleTorch();
