@@ -5,8 +5,8 @@ import { getProduct } from '$lib/api.svelte';
 
 /** class for managing the camera/scanner components lifecycle and functionality */
 export class ScannerManager {
-    isActive = $state(false);
-    isLocked = $state(false);
+    isActive = false;
+    isLocked = false;
 
     async #handleDetected(data: any) {
         const code = data.codeResult?.code;
@@ -73,8 +73,12 @@ export class ScannerManager {
 
         const config = { ...scannerConfig, inputStream: { ...scannerConfig.inputStream, target } };
 
-        Quagga.init(config, (err) => {
-            if (err) return ui.show("Camera failed", "error");
+        Quagga.init(config, (error) => {
+            if (error) {
+                this.handleCameraError(error);
+                return;
+            }
+
             Quagga.start();
             this.isActive = true;
             this.#resumeScanning();
@@ -86,5 +90,15 @@ export class ScannerManager {
         Quagga.stop();
         this.isActive = false;
         this.isLocked = false;
+    }
+
+    private handleCameraError(error: any) {
+        if (error.name === 'NotAllowedError' || error.code === 'NotAllowedError') {
+            ui.show('Camera permission denied', "error");
+        } else if (error.name === 'NotFoundError' || error.code === 'NotFoundError') {
+            ui.show('No camera found', "error");
+        } else {
+            ui.show(`Camera error: ${error.message || error}`, "error");
+        }
     }
 }

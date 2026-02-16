@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount, onDestroy } from 'svelte';
-    import { ScannerManager } from '$lib/scanner.svelte';
+    import { ScannerManager } from '$lib/camera/scanner.svelte';
     import ScannerOverlay from '$components/Scanner/ScannerOverlay.svelte';
     import Alert from "$components/alert.svelte";
 

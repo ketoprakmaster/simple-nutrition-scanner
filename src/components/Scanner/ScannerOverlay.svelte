@@ -1,9 +1,13 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
     import { resolve } from "$app/paths";
-    import type { ScannerManager } from "$lib/scanner.svelte";
+    import type { ScannerManager } from "$lib/camera/scanner.svelte";
+    import { ToggleTorch } from "$lib/camera/torch.svelte";
+    import { onDestroy } from "svelte";
+
 
     let { scanner }: { scanner: ScannerManager } = $props();
+    let torch = new ToggleTorch()
 
     function handleFileChange(e: Event) {
         const input = e.target as HTMLInputElement;
@@ -42,13 +46,27 @@
     Center the barcode or upload a photo
   </p>
 
-  <label class="btn btn-lg btn-primary rounded-md shadow-md w-full z-20">
-   	<p>Scan Image</p>
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-    </svg>
-    <input type="file" accept="image/*" class="hidden" onchange={handleFileChange} disabled={scanner.isLocked} />
-  </label>
+  <div class="grid grid-flow-col grid-cols-4 gap-2">
+  	<!-- scan button -->
+	  <label class="btn btn-lg btn-primary rounded-md shadow-md col-span-3 z-20">
+	   	<p>Scan Image</p>
+	    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+	        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+	    </svg>
+	    <input type="file" accept="image/*" class="hidden" onchange={handleFileChange} disabled={scanner.isLocked} />
+	  </label>
+
+		<!-- torch button -->
+		<button
+			class="btn rounded-md z-20 {torch.torchEnabled ? 'btn-warning' : 'btn-ghost'}"
+	    aria-label="toggle torch"
+	    onclick={() => torch.toggle()}
+		>
+				<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+				  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 9a3 3 0 0 1 3-3m-2 15h4m0-3c0-4.1 4-4.9 4-9A6 6 0 1 0 6 9c0 4 4 5 4 9h4Z"/>
+				</svg>
+		</button>
+  </div>
 </div>
 
 <style>
