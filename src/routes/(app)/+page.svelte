@@ -41,7 +41,7 @@
   </div>
 </header>
 
-<main class="p-5 -mt-8 space-y-6">
+<main class="p-5 -mt-8 pb-24 space-y-6">
   <div class="grid grid-cols-2 gap-4">
     <div class="stat bg-base-200 shadow-sm rounded-md border border-base-200 p-4">
       <div class="stat-title text-xs uppercase font-bold">Total Scans</div>
