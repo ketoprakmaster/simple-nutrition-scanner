@@ -1,7 +1,7 @@
 import Quagga from '@ericblade/quagga2';
 import { scannerConfig } from '$lib/config/scanner';
 import { ui } from '$lib/alert.svelte';
-import { getProduct } from '$lib/api.svelte';
+import { FoodApi } from '$lib/api/api.svelte';
 
 /** class for managing the camera/scanner components lifecycle and functionality */
 class ScannerManager {
@@ -18,7 +18,7 @@ class ScannerManager {
 
         try {
             // throw new Error("mock test code: " + code)
-            await getProduct(code);
+            await FoodApi.getProduct(code);
         } catch (err) {
             ui.show(err instanceof Error ? err.message : "Scan Error", "error");
         } finally {
@@ -46,7 +46,7 @@ class ScannerManager {
 
             if (code) {
                 try {
-                    await getProduct(code);
+                    await FoodApi.getProduct(code);
                 } catch (err) {
                     ui.show(err instanceof Error ? err.message : "Scan Error", "error");
                 } finally {

@@ -1,5 +1,5 @@
 import Dexie, { type Table } from 'dexie';
-import type { Product } from './state.svelte';
+import type { Product } from '$lib/api/state.svelte';
 
 export class ScanDatabase extends Dexie {
     // 'products' is the table name

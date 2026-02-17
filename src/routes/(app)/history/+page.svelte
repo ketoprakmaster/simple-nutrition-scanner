@@ -1,6 +1,6 @@
 <script lang='ts'>
-    import FoodCard from '$components/food-card.svelte';
-    import { history } from '$lib/state.svelte';
+    import FoodCard from '$components/product/FoodCardList.svelte';
+    import { history } from '$lib/api/state.svelte';
 
     let searchTerm = $state("");
 

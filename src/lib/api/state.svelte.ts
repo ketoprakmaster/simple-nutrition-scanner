@@ -2,14 +2,17 @@ import { db } from '$lib/config/db';
 import { ui } from '$lib/alert.svelte'
 import { liveQuery } from 'dexie';
 
-// Define types for better DX
+// Define types for NutriScore
+type NutriScoreGrade = "a" | "b" | "c" | "d" | "e" | "unknown";
+
+// Define types for Product
 export interface Product {
     code: string;
     product: {
         product_name: string;
         brands: string;
         image_url: string;
-        nutriscore_grade: string;
+        nutriscore_grade: NutriScoreGrade;
         nutriments: Record<string, number | string>;
     };
 }
@@ -17,10 +20,7 @@ export interface Product {
 class HistoryState {
     private _items = $state<Product[]>([]);
 
-    loading = $state(false);
-
     constructor() {
-        // Initialize the live observer
         liveQuery(() => db.products.reverse().toArray()).subscribe((items) => {
             this._items = items;
         });
@@ -29,8 +29,6 @@ class HistoryState {
     async clearAll() {
             try {
                 await db.products.clear();
-                // The liveQuery in the constructor will automatically
-                // update this._items to [] for the UI
             } catch (err) {
                 ui.show("Failed to clear history:", "error");
             }

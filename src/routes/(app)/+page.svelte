@@ -1,8 +1,8 @@
 <script lang='ts'>
-  import { history } from '$lib/state.svelte';
-  import { getProduct } from '$lib/api.svelte';
+  import { history } from '$lib/api/state.svelte';
+  import { FoodApi } from '$lib/api/api.svelte';
   import { goto } from '$app/navigation';
-  import FoodCard from '$components/food-card.svelte';
+  import FoodCard from '$components/product/FoodCardList.svelte';
   import { resolve } from '$app/paths';
   import { settings } from '$lib/global.svelte';
 
@@ -25,14 +25,14 @@
       bind:value={barcodeInput}
       placeholder="Type barcode..."
       class="input input-bordered join-item w-full text-base-content focus:outline-none"
-      onkeydown={(e) => e.key === 'Enter' && getProduct(barcodeInput)}
+      onkeydown={(e) => e.key === 'Enter' && FoodApi.getProduct(barcodeInput)}
     />
     <button
-      onclick={() => getProduct(barcodeInput)}
+      onclick={() => FoodApi.getProduct(barcodeInput)}
       class="btn btn-secondary join-item px-6"
-      disabled={history.loading}
+      disabled={FoodApi.loading}
     >
-      {#if history.loading}
+      {#if FoodApi.loading}
         <span class="loading loading-spinner loading-xs"></span>
       {:else}
         Check

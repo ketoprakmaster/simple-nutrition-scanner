@@ -1,26 +1,20 @@
 <script lang="ts">
     import { page } from '$app/state';
-    import { history } from '$lib/state.svelte';
-    import { getProduct } from '$lib/api.svelte';
+    import { history } from '$lib/api/state.svelte';
+    import { FoodApi } from '$lib/api/api.svelte';
     import { goto } from '$app/navigation';
     import { resolve } from '$app/paths';
 
 
     let item = $state<any>(null);
-    let isNotFound = $state(false);
 
     const loadProduct = async () => {
-        // Check cache/DB
         const data = await history.getById(page.params.id);
 
         if (data) {
             item = data;
         } else {
-            // If not in DB, try to fetch it from API
-            await getProduct(page.params.id);
-            // Try getting it one more time after API call
-            item = await history.getById(page.params.id);
-            if (!item) isNotFound = true;
+            await FoodApi.getProduct(page.params.id);
         }
     };
 
@@ -73,12 +67,12 @@
           </table>
         </div>
 
-    {:else if isNotFound}
-        <div class="alert alert-error">Product not found in history or registry.</div>
-    {:else}
+    {:else if FoodApi.loading}
         <div class="flex flex-col items-center justify-center pt-20 gap-4">
             <span class="loading loading-ring loading-lg text-primary"></span>
             <p class="text-sm opacity-50">Fetching product details...</p>
         </div>
+    {:else }
+        <div class="alert alert-error">Product not found in history or registry.</div>
     {/if}
 </div>

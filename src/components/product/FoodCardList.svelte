@@ -1,10 +1,25 @@
 <script lang="ts">
     import { gradeColors } from "$lib/helper.svelte";
-    import { history } from "$lib/state.svelte";
+    import { history, type Product } from '$lib/api/state.svelte';
     import { resolve } from "$app/paths";
-    import { goto } from "$app/navigation";
 
-    let { items, toggleDelete = false, messageEmpty = 'Nothing Here...' } = $props();
+    type Props = {
+      items: Product[];
+      toggleDelete?: boolean;
+      messageEmpty?: string;
+    }
+
+    let {
+      items,
+      toggleDelete = false,
+      messageEmpty = "Nothing Here..."
+    }: Props  = $props();
+
+    function removeItem(e: Event, item: Product) {
+        e.preventDefault();
+        e.stopPropagation();
+        history.remove(item.code);
+    }
 </script>
 
 {#if items.length === 0}
@@ -13,7 +28,7 @@
   </div>
 {:else}
   <div class="flex flex-col gap-3">
-    {#each items as item (item.id)}
+    {#each items as item (item.code)}
       <a
         href={resolve(`/history/[code]`,{code: item.code})}
         class="group relative flex items-center bg-base-200 rounded-md p-3 shadow-sm border border-base-200 active:scale-[0.98] transition-all hover:border-primary/30"
@@ -39,11 +54,7 @@
           {#if toggleDelete}
             <button
               type="button"
-              onclick={(e) => {
-                  e.preventDefault(); // Prevents the <a> from navigating
-                  e.stopPropagation(); // Prevents the click from bubbling to the <a>
-                  history.remove(item.product.id);
-              }}
+              onclick={(e) => removeItem(e,item)}
               class="btn btn-circle btn-ghost bg-error/5 btn-md text-error"
               aria-label="Delete item"
             >

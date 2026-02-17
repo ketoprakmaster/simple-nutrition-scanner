@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { history } from '$lib/state.svelte';
+    import { history } from '$lib/api/state.svelte';
     import { settings, APP_NAME, APP_VERSION, APP_ID } from '$lib/global.svelte';
     import { copyToClip } from '$lib/helper.svelte';
     import { logger } from '$lib/logger.svelte';
