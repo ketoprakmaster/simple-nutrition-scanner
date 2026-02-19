@@ -49,7 +49,7 @@ class ScannerController {
     }
 
     async #handleCode(code: string) {
-        if (this.isProcessing) return;
+        if (this.isProcessing || !this.isActive) return;
 
         this.isProcessing = true;
 
@@ -64,9 +64,8 @@ class ScannerController {
                             : "Product found!",
                         "success",
                     );
-                    goto(
-                        resolve(`/history/${result.code}`),
-                    );
+                    goto(resolve(`/history/${result.code}`));
+                    this.isActive = false;
                     break;
 
                 case "not_found":
