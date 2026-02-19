@@ -6,4 +6,4 @@ export const prerender = true;
 import "../app.css";
 
 // setup logger
-import { logger } from '$lib/logger.svelte';
+import { logger } from '$lib/ui/logger.svelte';

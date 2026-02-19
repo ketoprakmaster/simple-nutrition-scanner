@@ -1,7 +1,8 @@
 <script lang="ts">
-    import { gradeColors } from "$lib/helper.svelte";
-    import { history, type Product } from '$lib/api/state.svelte';
+    import type {Product } from '$lib/types/product'
+    import { productStore } from '$lib/ui/product.svelte';
     import { resolve } from "$app/paths";
+    import { gradeColors } from '$lib/utils/helpers/nutriscore';
 
     type Props = {
       items: Product[];
@@ -18,7 +19,7 @@
     function removeItem(e: Event, item: Product) {
         e.preventDefault();
         e.stopPropagation();
-        history.remove(item.code);
+        productStore.remove(item.code);
     }
 </script>
 

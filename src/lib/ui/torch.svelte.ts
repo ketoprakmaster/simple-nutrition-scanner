@@ -1,4 +1,4 @@
-import { ui } from "$lib/alert.svelte";
+import { ui } from "$lib/ui/alert.svelte";
 import Quagga from "@ericblade/quagga2";
 
 class ToggleTorch {

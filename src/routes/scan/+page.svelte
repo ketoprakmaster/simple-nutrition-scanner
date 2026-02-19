@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount, onDestroy } from 'svelte';
-    import { Scanner } from '$lib/camera/scanner.svelte';
+    import { Scanner } from '$lib/ui/scanner.svelte';
     import Alert from "$components/alert.svelte";
     import ScanOverlay from '$components/Scanner/ScanOverlay.svelte';
     import ButtonFileScan from '$components/Scanner/ButtonFileScan.svelte';
@@ -17,7 +17,7 @@
 <div class="relative h-dvh overflow-hidden bg-black">
   <div bind:this={scannerContainer} class="absolute inset-0 z-0 scanner-container"></div>
 
-  {#if Scanner.isLocked}
+  {#if Scanner.isProcessing}
       <div class="absolute inset-0 z-40 flex flex-col items-center justify-center bg-black/20 backdrop-blur-sm">
           <span class="loading loading-ring loading-xl text-primary"></span>
           <p class="text-white mt-4 font-medium tracking-wide">Processing...</p>
@@ -27,7 +27,7 @@
 
   <div class="relative flex h-dvh flex-col justify-between py-10 p-5 gap-5 max-w-2xl mx-auto">
   	<!-- overlay -->
-   	<ScanOverlay loading={Scanner.isLocked}/>
+   	<ScanOverlay loading={Scanner.isProcessing}/>
 
     <!-- actions button -->
     <div class="grid grid-flow-col grid-cols-4 gap-2">

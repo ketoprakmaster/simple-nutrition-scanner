@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
-  import { checkActive } from '$lib/helper.svelte';
+  import { checkActive } from '$lib/utils/helpers/navigation';
 
   const navItems = [
     { label: 'History', path: '/history', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' },

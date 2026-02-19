@@ -1,4 +1,4 @@
-import { copyToClip } from "./helper.svelte";
+import { copyToClip } from "../utils/helpers/clipboard";
 
 class LogManager {
     logs = $state<string[]>([]);

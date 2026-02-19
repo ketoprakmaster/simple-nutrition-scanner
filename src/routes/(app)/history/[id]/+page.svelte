@@ -1,24 +1,15 @@
 <script lang="ts">
-    import { page } from '$app/state';
-    import { history } from '$lib/api/state.svelte';
-    import { FoodApi } from '$lib/api/api.svelte';
-    import { goto } from '$app/navigation';
-    import { resolve } from '$app/paths';
+  import { page } from '$app/state';
+  import { productStore } from '$lib/ui/product.svelte';
+  import { goto } from '$app/navigation';
+  import { resolve } from '$app/paths';
 
+  $effect(() => {
+    const id = page.params.id;
+    if (id) productStore.ensure(id);
+  });
 
-    let item = $state<any>(null);
-
-    const loadProduct = async () => {
-        const data = await history.getById(page.params.id);
-
-        if (data) {
-            item = data;
-        } else {
-            await FoodApi.getProduct(page.params.id);
-        }
-    };
-
-    loadProduct();
+  const item = $derived(productStore.current);
 </script>
 
 <div class="max-w-md mx-auto min-h-screen bg-base-100 p-6 pb-24">
@@ -67,7 +58,7 @@
           </table>
         </div>
 
-    {:else if FoodApi.loading}
+    {:else if productStore.loading}
         <div class="flex flex-col items-center justify-center pt-20 gap-4">
             <span class="loading loading-ring loading-lg text-primary"></span>
             <p class="text-sm opacity-50">Fetching product details...</p>

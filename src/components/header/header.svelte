@@ -1,7 +1,7 @@
 <script lang="ts">
     import { goto } from '$app/navigation';
     import { resolve } from '$app/paths';
-    import { settings } from '$lib/global.svelte';
+    import { settings } from '$lib/core/settings.svelte';
     import ButtonPWA from '$components/header/ButtonPWA.svelte';
     import ButtonTheme from '$components/header/ButtonTheme.svelte';
 </script>

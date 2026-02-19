@@ -1,11 +1,11 @@
 <script lang='ts'>
     import FoodCard from '$components/product/FoodCardList.svelte';
-    import { history } from '$lib/api/state.svelte';
+    import { productStore } from '$lib/ui/product.svelte';
 
     let searchTerm = $state("");
 
     let filteredHistory = $derived(
-        history.items.filter(item =>
+        productStore.items.filter(item =>
             item.product.product_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             item.product.brands.toLowerCase().includes(searchTerm.toLowerCase())
         )

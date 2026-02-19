@@ -1,14 +1,15 @@
 <script lang="ts">
-    import { history } from '$lib/api/state.svelte';
-    import { settings, APP_NAME, APP_VERSION, APP_ID } from '$lib/global.svelte';
-    import { copyToClip } from '$lib/helper.svelte';
-    import { logger } from '$lib/logger.svelte';
+    import { productStore } from '$lib/ui/product.svelte';
+    import { settings} from '$lib/core/settings.svelte';
+    import { APP_ID , APP_NAME, APP_VERSION, DEV_CONTACT } from '$lib/core/appInfo';
+    import { copyToClip } from '$lib/utils/helpers/clipboard';
+    import { logger } from '$lib/ui/logger.svelte';
 
     let showConfirm = $state(false);
     let showConsole = $state(false)
 
     async function handleClearAll() {
-        await history.clearAll();
+        await productStore.clear();
         showConfirm = false;
         // Optional: show a toast or redirect
     }
@@ -29,7 +30,7 @@
                     </svg>
                     <span class="font-medium">Clear Scan History</span>
                 </div>
-                <span class="text-xs opacity-50">{history.items.length} items</span>
+                <span class="text-xs opacity-50">{productStore.items.length} items</span>
             </button>
         </div>
     </section>

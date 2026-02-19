@@ -1,12 +1,4 @@
-import { logger } from "./logger.svelte";
-
-export type AlertType = 'success' | 'error' | 'info' | 'warning';
-
-interface Alert {
-    id: number;
-    type: AlertType;
-    message: string;
-}
+import type { Alert, AlertType} from '$lib/types/alert';
 
 class AlertState {
     private _alerts = $state<Alert[]>([]);

@@ -1,4 +1,3 @@
-import Quagga from '@ericblade/quagga2';
 import type { QuaggaJSConfigObject } from '@ericblade/quagga2'
 
 export const scannerConfig: QuaggaJSConfigObject = {

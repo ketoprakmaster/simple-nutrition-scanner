@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Torch } from "$lib/camera/torch.svelte";
+  import { Torch } from "$lib/ui/torch.svelte";
 </script>
 
 <!-- torch button -->

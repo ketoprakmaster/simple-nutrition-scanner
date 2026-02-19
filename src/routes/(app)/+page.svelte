@@ -1,20 +1,25 @@
-<script lang='ts'>
-  import { history } from '$lib/api/state.svelte';
-  import { FoodApi } from '$lib/api/api.svelte';
+<script lang="ts">
+  import { productStore } from '$lib/ui/product.svelte';
   import { goto } from '$app/navigation';
   import FoodCard from '$components/product/FoodCardList.svelte';
   import { resolve } from '$app/paths';
-  import { settings } from '$lib/global.svelte';
+  import { settings } from '$lib/core/settings.svelte';
 
   let barcodeInput = $state("");
 
-  // Derived stats to make the landing page feel more personal
   const stats = $derived({
-    total: history.items.length,
-    healthy: history.items.filter(i => ['a', 'b'].includes(i.product.nutriscore_grade)).length,
-    recent: history.items.slice(0, 3)
+    total: productStore.items.length,
+    healthy: productStore.items.filter(i =>
+      ['a', 'b'].includes(i.product.nutriscore_grade)
+    ).length,
+    recent: productStore.items.slice(0, 3)
   });
+
+  function submit() {
+    productStore.lookup(barcodeInput);
+  }
 </script>
+
 
 <header class="bg-linear-65 from-purple-500 to-blue-700 text-primary-content px-5 pt-8 pb-12 rounded-b-[3rem] shadow-lg">
   <h1 class="text-3xl font-black mb-2">{ settings.landingTitle }</h1>
@@ -25,14 +30,14 @@
       bind:value={barcodeInput}
       placeholder="Type barcode..."
       class="input input-bordered join-item w-full text-base-content focus:outline-none"
-      onkeydown={(e) => e.key === 'Enter' && FoodApi.getProduct(barcodeInput)}
+      onkeydown={(e) => e.key === 'Enter' && productStore.lookup(barcodeInput)}
     />
     <button
-      onclick={() => FoodApi.getProduct(barcodeInput)}
+      onclick={() => productStore.lookup(barcodeInput)}
       class="btn btn-secondary join-item px-6"
-      disabled={FoodApi.loading}
+      disabled={productStore.loading}
     >
-      {#if FoodApi.loading}
+      {#if productStore.loading}
         <span class="loading loading-spinner loading-xs"></span>
       {:else}
         Check
