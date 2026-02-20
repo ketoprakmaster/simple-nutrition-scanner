@@ -1,5 +1,5 @@
 // labels icon for labels_tags
-// not all are captured
+// not all are presented here
 export const labelIcons: Record<string, string> = {
     'en:halal': '☪️',
     'en:vegan': '🌱',

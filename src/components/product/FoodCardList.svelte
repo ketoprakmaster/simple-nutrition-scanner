@@ -2,7 +2,7 @@
     import type {Product } from '$lib/types/product'
     import { productStore } from '$lib/ui/product.svelte';
     import { resolve } from "$app/paths";
-    import { gradeColors, getScoreValue, gradeBgColors } from '$lib/utils/helpers/product';
+    import { ProductAnalysis } from '$lib/models/productAnalysis';
 
     type Props = {
       items: Product[];
@@ -31,6 +31,7 @@
 {:else}
   <div class="flex flex-col gap-4">
     {#each items as item (item.code)}
+    {@const info = new ProductAnalysis(item)}
       <a
         href={resolve(`/history/${item.code}`)}
         class="group relative flex items-center bg-base-200/50 rounded-xl p-4 shadow-sm border border-base-300 active:scale-[0.98] transition-all hover:border-primary/25 hover:shadow-md"
@@ -51,14 +52,14 @@
             {item.product.brands || 'No Brand'}
           </p>
           <div class="flex items-center gap-1 mt-1">
-             <div class="w-2 h-2 rounded-full {gradeBgColors[item.product.nutriscore_grade as keyof typeof gradeBgColors] || gradeBgColors.unknown}"></div>
-             <span class="text-[10px] font-bold uppercase opacity-60 tracking-wider">Score: {getScoreValue(item.product.nutriscore_grade)}</span>
+             <div class="w-2 h-2 rounded-full {info.bgClass}"></div>
+             <span class="text-[10px] font-bold uppercase opacity-60 tracking-wider">Score: {info.grade }</span>
           </div>
         </div>
 
         <div class="flex items-center gap-2">
-          <div class="radial-progress {gradeColors[item.product.nutriscore_grade as keyof typeof gradeColors] || gradeColors.unknown} opacity-80" style="--value:{getScoreValue(item.product.nutriscore_grade)}; --size:2.5rem; --thickness: 3px;" role="progressbar">
-            <span class="text-[10px] font-black text-base-content">{getScoreValue(item.product.nutriscore_grade)}</span>
+          <div class="radial-progress {info.colorClass} opacity-80" style="--value:{info.scoreValue}; --size:2.5rem; --thickness: 3px;" role="progressbar">
+            <span class="text-[10px] font-black text-base-content">{info.scoreValue}</span>
           </div>
 
           {#if toggleDelete}
