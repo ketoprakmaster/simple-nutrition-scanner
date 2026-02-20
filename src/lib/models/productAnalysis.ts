@@ -1,8 +1,6 @@
 import type { NutriScoreGrade, Product } from "$lib/types/product";
 
-// Simplified list of common additives Yuka/OFF flagged as "Red" (Hazardous)
-// In a production app, you'd fetch or store a larger dictionary.
-const HAZARDOUS_ADDITIVES = ['e102', 'e110', 'e129', 'e150c', 'e150d', 'e250', 'e951'];
+import additivesMap from '$lib/data/additives-min.json' with {type : "json"};
 
 export class ProductAnalysis {
     #item: Product | undefined;
@@ -20,18 +18,29 @@ export class ProductAnalysis {
         return map[grade || ''] ?? 0;
     }
 
-    private get additivePoints(): number {
-        const additives = this.raw?.additives_tags || [];
-        if (additives.length === 0) return 30;
+    private get additiveImpact() {
+        const tags = this.raw?.additives_tags || [];
+        let additiveScore = 30;
+        let hasHazardous = false;
 
-        // Clean the strings (e.g., "en:e150c" -> "e150c")
-        const ids = additives.map(a => a.split(':').pop()?.toLowerCase());
+        tags.forEach(tag => {
+            const info = (additivesMap as Record<string, {r: number, n: string}>)[tag];
+            if (!info) return;
 
-        const hasHazardous = ids.some(id => HAZARDOUS_ADDITIVES.includes(id || ''));
+            if (info.r === 3) {
+                additiveScore -= 20;
+                hasHazardous = true;
+            } else if (info.r === 2) {
+                additiveScore -= 10;
+            } else if (info.r === 1) {
+                additiveScore -= 5;
+            }
+        });
 
-        if (hasHazardous) return 0; // High penalty
-        if (ids.length > 3) return 15; // "Moderate" penalty for quantity
-        return 25; // Minor penalty for "Safe" additives
+        return {
+            score: additiveScore,
+            hasHazardous
+        };
     }
 
     private get organicPoints(): number {
@@ -40,20 +49,15 @@ export class ProductAnalysis {
     }
 
     get scoreValue(): number {
-        if (!this.exists) return 0;
+        const nutrition = this.nutritionPoints;
+        const { score : additiveScore , hasHazardous } = this.additiveImpact;
+        const organic = this.organicPoints;
 
-        let total = this.nutritionPoints + this.additivePoints + this.organicPoints;
+        let total = nutrition + additiveScore + organic;
 
-        // Logic: If there is a hazardous additive, cap the total score at 49.
-        const additives = this.raw?.additives_tags || [];
-        const ids = additives.map(a => a.split(':').pop()?.toLowerCase());
-        const hasHazardous = ids.some(id => HAZARDOUS_ADDITIVES.includes(id || ''));
+        if (hasHazardous && total > 49) total = 49;
 
-        if (hasHazardous && total > 49) {
-            total = 49;
-        }
-
-        return Math.min(100, total);
+        return Math.min(100, Math.max(0, total));
     }
 
     get scoreLabel(): string {
