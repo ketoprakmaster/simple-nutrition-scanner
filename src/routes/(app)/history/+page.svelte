@@ -7,7 +7,7 @@
     let filteredHistory = $derived(
         productStore.items.filter(item =>
             item.product.product_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            item.product.brands.toLowerCase().includes(searchTerm.toLowerCase())
+            (item.product.brands || "").toLowerCase().includes(searchTerm.toLowerCase())
         )
     );
 </script>

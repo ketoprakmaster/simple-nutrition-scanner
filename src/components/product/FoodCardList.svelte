@@ -2,7 +2,7 @@
     import type {Product } from '$lib/types/product'
     import { productStore } from '$lib/ui/product.svelte';
     import { resolve } from "$app/paths";
-    import { gradeColors } from '$lib/utils/helpers/nutriscore';
+    import { gradeColors, getScoreValue, gradeBgColors } from '$lib/utils/helpers/product';
 
     type Props = {
       items: Product[];
@@ -24,39 +24,48 @@
 </script>
 
 {#if items.length === 0}
-  <div class="flex flex-col items-center justify-center p-12 border-2 border-dashed border-base-300 bg-base-200 rounded-md">
-    <p class="text-sm italic font-light text-base-content/50">{messageEmpty}</p>
+  <div class="flex flex-col items-center justify-center p-12 bg-base-100 rounded-3xl shadow-sm border border-base-200">
+    <div class="text-4xl mb-4 opacity-20">🔍</div>
+    <p class="text-sm font-medium text-base-content/40">{messageEmpty}</p>
   </div>
 {:else}
-  <div class="flex flex-col gap-3">
+  <div class="flex flex-col gap-4">
     {#each items as item (item.code)}
       <a
-        href={resolve(`/history/[code]`,{code: item.code})}
-        class="group relative flex items-center bg-base-200 rounded-md p-3 shadow-sm border border-base-200 active:scale-[0.98] transition-all hover:border-primary/30"
+        href={resolve(`/history/${item.code}`)}
+        class="group relative flex items-center bg-base-200/50 rounded-xl p-4 shadow-sm border border-base-300 active:scale-[0.98] transition-all hover:border-primary/25 hover:shadow-md"
       >
-        <div class="relative h-20 w-20 min-w-20 overflow-hidden rounded-md bg-slate-50 flex items-center justify-center">
-          <img src={item.product.image_url} alt={item.product.product_name} class="h-full w-full object-cover mix-blend-multiply" crossorigin="anonymous"/>
+        <div class="relative h-16 w-16 min-w-16 overflow-hidden rounded-xl bg-white flex items-center justify-center shadow-inner">
+          {#if item.product.image_url}
+            <img src={item.product.image_url} alt={item.product.product_name} class="h-full w-full object-cover" crossorigin="anonymous"/>
+          {:else}
+            <span class="text-2xl">🛒</span>
+          {/if}
         </div>
 
         <div class="flex-1 px-4 overflow-hidden text-left">
           <h3 class="font-bold text-sm text-base-content line-clamp-1 leading-snug">
             {item.product.product_name}
           </h3>
-          <p class="text-xs font-medium opacity-50 uppercase tracking-tight">
+          <p class="text-xs font-medium opacity-50 truncate">
             {item.product.brands || 'No Brand'}
           </p>
+          <div class="flex items-center gap-1 mt-1">
+             <div class="w-2 h-2 rounded-full {gradeBgColors[item.product.nutriscore_grade as keyof typeof gradeBgColors] || gradeBgColors.unknown}"></div>
+             <span class="text-[10px] font-bold uppercase opacity-60 tracking-wider">Score: {getScoreValue(item.product.nutriscore_grade)}</span>
+          </div>
         </div>
 
-        <div class="flex items-center gap-3">
-          <div class="{gradeColors[item.product.nutriscore_grade]} w-10 h-10 flex items-center justify-center rounded-lg shadow-inner overflow-hidden">
-            <span class="text-xl font-black text-white">{item.product.nutriscore_grade?.toUpperCase() || '?'}</span>
+        <div class="flex items-center gap-2">
+          <div class="radial-progress {gradeColors[item.product.nutriscore_grade as keyof typeof gradeColors] || gradeColors.unknown} opacity-80" style="--value:{getScoreValue(item.product.nutriscore_grade)}; --size:2.5rem; --thickness: 3px;" role="progressbar">
+            <span class="text-[10px] font-black text-base-content">{getScoreValue(item.product.nutriscore_grade)}</span>
           </div>
 
           {#if toggleDelete}
             <button
               type="button"
               onclick={(e) => removeItem(e,item)}
-              class="btn btn-circle btn-ghost bg-error/5 btn-md text-error"
+              class="btn btn-circle btn-ghost btn-xs text-error/40 hover:text-error hover:bg-error/10"
               aria-label="Delete item"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
