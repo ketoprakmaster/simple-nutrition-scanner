@@ -36,7 +36,7 @@
         href={resolve(`/history/${item.code}`)}
         class="group relative flex items-center bg-base-200/50 rounded-xl p-4 shadow-sm border border-base-300 active:scale-[0.98] transition-all hover:border-primary/25 hover:shadow-md"
       >
-        <div class="relative h-16 w-16 min-w-16 overflow-hidden rounded-xl bg-white flex items-center justify-center shadow-inner">
+        <div class="relative h-16 w-16 min-w-16 overflow-hidden rounded-xl bg-base-content/10 flex items-center justify-center shadow-inner">
           {#if item.product.image_url}
             <img src={item.product.image_url} alt={item.product.product_name} class="h-full w-full object-cover" crossorigin="anonymous"/>
           {:else}
@@ -52,13 +52,13 @@
             {item.product.brands || 'No Brand'}
           </p>
           <div class="flex items-center gap-1 mt-1">
-             <div class="w-2 h-2 rounded-full {info.bgClass}"></div>
-             <span class="text-[10px] font-bold uppercase opacity-60 tracking-wider">Score: {info.grade }</span>
+             <div class="w-2 h-2 rounded-full {info.BgClass}"></div>
+             <span class="text-[10px] font-bold uppercase opacity-60 tracking-wider">Score: {info.scoreLabel }</span>
           </div>
         </div>
 
         <div class="flex items-center gap-2">
-          <div class="radial-progress {info.colorClass} opacity-80" style="--value:{info.scoreValue}; --size:2.5rem; --thickness: 3px;" role="progressbar">
+          <div class="radial-progress border-4 border-base-300 {info.colorClass}" style="--value:{info.scoreValue}; --size:2.5rem; --thickness: 4px;" role="progressbar">
             <span class="text-[10px] font-black text-base-content">{info.scoreValue}</span>
           </div>
 

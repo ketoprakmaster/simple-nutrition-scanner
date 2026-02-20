@@ -49,8 +49,8 @@
                     <span class="text-4xl font-black text-base-content">{analysis?.scoreValue}</span>
                 </div>
                 <div class="flex flex-col">
-                    <span class="text-2xl font-bold {analysis?.colorClass}">{analysis?.scoreLabel}</span>
-                    <span class="text-md opacity-50 uppercase tracking-widest font-bold">Nutri-Score : {analysis.grade === "unknown" ? '?' : analysis.grade}</span>
+                    <span class="text-xl uppercase tracking-widest font-bold">Score :</span>
+                    <span class="text-2xl font-bold {analysis?.colorClass}">{analysis.scoreLabel}</span>
                 </div>
             </div>
         </div>

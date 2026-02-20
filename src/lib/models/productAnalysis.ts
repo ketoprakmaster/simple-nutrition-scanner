@@ -1,23 +1,8 @@
 import type { NutriScoreGrade, Product } from "$lib/types/product";
 
-const gradeColors = {
-    a: 'text-green-600', b: 'text-green-400', c: 'text-yellow-400',
-    d: 'text-orange-500', e: 'text-red-600', unknown: 'text-gray-300'
-};
-
-const gradeBgColors = {
-    a: 'bg-green-600', b: 'bg-green-400', c: 'bg-yellow-400',
-    d: 'bg-orange-500', e: 'bg-red-600', unknown: 'bg-gray-300'
-};
-
-const scoreMap: Record<string, { label: string; value: number }> = {
-    a: { label: "Excellent", value: 90 },
-    b: { label: "Good", value: 70 },
-    c: { label: "Mediocre", value: 45 },
-    d: { label: "Poor", value: 25 },
-    e: { label: "Bad", value: 10 },
-    unknown: { label: "Unknown", value: 0 }
-};
+// Simplified list of common additives Yuka/OFF flagged as "Red" (Hazardous)
+// In a production app, you'd fetch or store a larger dictionary.
+const HAZARDOUS_ADDITIVES = ['e102', 'e110', 'e129', 'e150c', 'e150d', 'e250', 'e951'];
 
 export class ProductAnalysis {
     #item: Product | undefined;
@@ -29,22 +14,73 @@ export class ProductAnalysis {
     get exists() { return !!this.#item?.product; }
     get raw() { return this.#item?.product; }
 
-    get grade(): NutriScoreGrade {
-        return this.raw?.nutriscore_grade?.toLowerCase() as NutriScoreGrade;
+    private get nutritionPoints(): number {
+        const grade = this.raw?.nutriscore_grade?.toLowerCase() as NutriScoreGrade;
+        const map: Record<string, number> = { a: 60, b: 45, c: 30, d: 15, e: 0 };
+        return map[grade || ''] ?? 0;
     }
 
-    get scoreValue() {
-        return scoreMap[this.grade]?.value ?? 0;
+    private get additivePoints(): number {
+        const additives = this.raw?.additives_tags || [];
+        if (additives.length === 0) return 30;
+
+        // Clean the strings (e.g., "en:e150c" -> "e150c")
+        const ids = additives.map(a => a.split(':').pop()?.toLowerCase());
+
+        const hasHazardous = ids.some(id => HAZARDOUS_ADDITIVES.includes(id || ''));
+
+        if (hasHazardous) return 0; // High penalty
+        if (ids.length > 3) return 15; // "Moderate" penalty for quantity
+        return 25; // Minor penalty for "Safe" additives
     }
 
-    get scoreLabel() {
-        return scoreMap[this.grade]?.label ?? "Unknown";
+    private get organicPoints(): number {
+        const labels = this.raw?.labels_tags || [];
+        return labels.some(l => l.includes('organic')) ? 10 : 0;
     }
 
-    get colorClass() { return gradeColors[this.grade] || gradeColors.unknown; }
-    get bgClass() { return gradeBgColors[this.grade] || gradeBgColors.unknown; }
+    get scoreValue(): number {
+        if (!this.exists) return 0;
 
-    // This complex calculation only runs if it calles it
+        let total = this.nutritionPoints + this.additivePoints + this.organicPoints;
+
+        // Logic: If there is a hazardous additive, cap the total score at 49.
+        const additives = this.raw?.additives_tags || [];
+        const ids = additives.map(a => a.split(':').pop()?.toLowerCase());
+        const hasHazardous = ids.some(id => HAZARDOUS_ADDITIVES.includes(id || ''));
+
+        if (hasHazardous && total > 49) {
+            total = 49;
+        }
+
+        return Math.min(100, total);
+    }
+
+    get scoreLabel(): string {
+        const s = this.scoreValue;
+        if (s >= 75) return "Excellent";
+        if (s >= 50) return "Good";
+        if (s >= 25) return "Mediocre";
+        return "Poor";
+    }
+
+    get colorClass(): string {
+        const s = this.scoreValue;
+        if (s >= 75) return 'text-green-600';
+        if (s >= 50) return 'text-green-400';
+        if (s >= 25) return 'text-yellow-500';
+        return 'text-red-600';
+    }
+
+    get BgClass(): string {
+        const s = this.scoreValue;
+        if (s >= 75) return 'bg-green-600';
+        if (s >= 50) return 'bg-green-400';
+        if (s >= 25) return 'bg-yellow-500';
+        return 'bg-red-600';
+
+    }
+
     get nutrients() {
         if (!this.raw) return [];
         const levels = this.raw.nutrient_levels || {};

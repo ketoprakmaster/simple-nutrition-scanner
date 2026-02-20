@@ -12,6 +12,7 @@ export type Product = {
         nutriscore_score?: number;
         nova_group?: number;
         ecoscore_grade?: string;
+        ingredients_text_en?: string;
         ingredients_text?: string;
         additives_tags?: string[];
         labels_tags?: string[];
