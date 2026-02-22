@@ -35,6 +35,7 @@
 
 {#if canInstall}
 	<button
+		aria-label="install the apps"
 		onclick={installApp}
 		class="btn btn-primary btn-sm normal-case mr-2"
 	>

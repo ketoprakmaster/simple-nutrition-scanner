@@ -9,6 +9,7 @@
 		class="theme-controller"
 		checked={theme.isDark}
 		onchange={() => theme.toggle()}
+		aria-label="change the themes of the apps"
 	/>
 
 	<svg class="swap-off h-7 w-7 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">

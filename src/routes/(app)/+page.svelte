@@ -21,6 +21,11 @@
 </script>
 
 
+<svelte:head>
+    <title>{settings.landingTitle} | Food Scanner</title>
+    <meta name="description" content="Quickly scan food barcodes to see Nutri-Score, additives, and health ratings using a simple tool." />
+</svelte:head>
+
 <header class="bg-linear-65 from-purple-500 to-blue-700 text-primary-content px-5 pt-8 pb-12 rounded-b-[3rem] shadow-lg">
   <h1 class="text-3xl font-black mb-2">{ settings.landingTitle }</h1>
   <p class="opacity-90 text-sm mb-6 font-medium">{ settings.landingSubtitle }</p>
