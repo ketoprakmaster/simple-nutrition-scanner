@@ -2,6 +2,7 @@
     import type { Product } from "$lib/types/product";
     import { labelIcons } from "$lib/utils/helpers/labels";
     import {ProductAnalysis} from "$lib/models/productAnalysis";
+    import { getCalories } from "$lib/utils/helpers/product";
 
     type Props = {item: Product, analysis: ProductAnalysis};
 
@@ -55,7 +56,7 @@
             <div class="flex flex-col border-l pl-4 border-base-content/10">
                 <span class="text-xs uppercase tracking-widest opacity-60 font-bold">Energy</span>
                 <div class="flex items-baseline gap-1">
-                    <span class="text-3xl font-black">{item.product.nutriments['energy-kcal_100g'] || 0}</span>
+                    <span class="text-3xl font-black">{getCalories(item).value || "N/A"}</span>
                     <span class="text-sm font-bold opacity-60">kcal</span>
                 </div>
                 <span class="text-lg font-medium {analysis?.colorClass}">{analysis.scoreLabel} Score</span>
