@@ -43,15 +43,22 @@
         {/if}
 
         <!-- score circle -->
-        <div class="flex flex-col items-center gap-2 ">
-            <div class="flex items-center gap-4">
-                <div class="radial-progress border-8 border-base-300 {analysis?.colorClass}" style="--value:{analysis?.scoreValue}; --size:6rem; --thickness: 0.5rem;" role="progressbar">
-                    <span class="text-4xl font-black text-base-content">{analysis?.scoreValue}</span>
+        <div class="flex items-center gap-6">
+	        <div
+						class="radial-progress border-8 border-base-300 {analysis?.colorClass}"
+						style="--value:{analysis?.scoreValue}; --size:6rem; --thickness: 0.5rem;"
+						role="progressbar"
+					>
+						<span class="text-4xl font-black">{analysis?.scoreValue}</span>
+            </div>
+
+            <div class="flex flex-col border-l pl-4 border-base-content/10">
+                <span class="text-xs uppercase tracking-widest opacity-60 font-bold">Energy</span>
+                <div class="flex items-baseline gap-1">
+                    <span class="text-3xl font-black">{item.product.nutriments['energy-kcal_100g'] || 0}</span>
+                    <span class="text-sm font-bold opacity-60">kcal</span>
                 </div>
-                <div class="flex flex-col">
-                    <span class="text-xl uppercase tracking-widest font-bold">Score :</span>
-                    <span class="text-2xl font-bold {analysis?.colorClass}">{analysis.scoreLabel}</span>
-                </div>
+                <span class="text-lg font-medium {analysis?.colorClass}">{analysis.scoreLabel} Score</span>
             </div>
         </div>
     </div>
