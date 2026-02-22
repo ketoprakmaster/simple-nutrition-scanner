@@ -1,6 +1,8 @@
 import type { NutriScoreGrade, Product } from "$lib/types/product";
 
 import additivesMap from '$lib/data/additives-min.json' with {type : "json"};
+import { settings } from "$lib/core/settings.svelte";
+
 
 export class ProductAnalysis {
     #item: Product | undefined;
@@ -38,7 +40,7 @@ export class ProductAnalysis {
         });
 
         return {
-            score: additiveScore,
+            score: Math.max(0, additiveScore),
             hasHazardous
         };
     }
@@ -48,7 +50,13 @@ export class ProductAnalysis {
         return labels.some(l => l.includes('organic')) ? 10 : 0;
     }
 
-    get scoreValue(): number {
+    private get NutriScore(): number {
+        const grade = this.raw?.nutriscore_grade?.toLowerCase() as NutriScoreGrade;
+        const map: Record<string, number> = { a: 100, b: 75, c: 50, d: 25, e: 10, unknown: 0 };
+        return map[grade || ''] ?? 0;
+    }
+
+    private get AppScore(): number {
         const nutrition = this.nutritionPoints;
         const { score : additiveScore , hasHazardous } = this.additiveImpact;
         const organic = this.organicPoints;
@@ -58,6 +66,14 @@ export class ProductAnalysis {
         if (hasHazardous && total > 49) total = 49;
 
         return Math.min(100, Math.max(0, total));
+    }
+
+    get scoreValue(): number {
+        if (settings.useCustomScore === 'nutriscore') {
+            return this.NutriScore
+        } else {
+            return this.AppScore
+        }
     }
 
     get scoreLabel(): string {

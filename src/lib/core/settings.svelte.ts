@@ -4,6 +4,7 @@ class GlobalSettings {
     landingTitle = $state(localStorage.getItem('landing_title') || 'Hello!')
     landingSubtitle = $state(localStorage.getItem('landing_subtitle') || "Ready to see what's inside your food today?")
     instanceId = $state(localStorage.getItem('instance_id') || this.generateID());
+    useCustomScore = $state(localStorage.getItem('score_func') || 'nutriscore');
 
     // Sync changes to localStorage whenever they happen
     constructor() {
@@ -13,6 +14,7 @@ class GlobalSettings {
                 localStorage.setItem('show_nutriscore', String(this.showNutriscoreOnCards));
                 localStorage.setItem('landing_title', String(this.landingTitle));
                 localStorage.setItem('landing_subtitle', this.landingSubtitle);
+                localStorage.setItem('score_func', this.useCustomScore);
             });
         });
     }

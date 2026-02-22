@@ -35,6 +35,40 @@
         </div>
     </section>
 
+    <section class="mb-8">
+        <h2 class="text-sm font-semibold uppercase tracking-wider opacity-50 mb-4">Scoring Methodology</h2>
+        <div class="bg-base-200 rounded-box border border-base-300 p-5">
+            <p class="text-xs opacity-60 mb-4 leading-relaxed">
+                Choose how products are rated. <b>Nutri-Score</b> is the government standard, while <b>App Analysis</b> factors in additives and organic status.
+            </p>
+
+            <div class="join w-full">
+                <button
+                    class="join-item btn btn-sm flex-1 {settings.useCustomScore === 'nutriscore' ? 'btn-accent' : ''}"
+                    onclick={() => settings.useCustomScore = 'nutriscore'}
+                >
+                    Nutri-Score
+                </button>
+                <button
+                    class="join-item btn btn-sm flex-1 {settings.useCustomScore === 'appscore' ? 'btn-accent' : ''}"
+                    onclick={() => settings.useCustomScore = 'appscore'}
+                >
+                    App Analysis
+                </button>
+            </div>
+
+            {#if settings.useCustomScore === 'appscore'}
+                <div class="mt-4 p-3 bg-base-300/50 rounded-lg border border-white/5">
+                    <ul class="text-[11px] space-y-1 opacity-70">
+                        <li class="flex items-center gap-2">✓ Nutri-Score (60%)</li>
+                        <li class="flex items-center gap-2">✓ Additive Risk (30%)</li>
+                        <li class="flex items-center gap-2">✓ Organic Status (10%)</li>
+                    </ul>
+                </div>
+            {/if}
+        </div>
+    </section>
+
     <section class='mb-8 '>
       <h2 class="text-sm font-semibold uppercase tracking-wider opacity-50 mb-4">Personalization</h2>
 

@@ -73,8 +73,6 @@
                   <span class="badge badge-sm border {riskColors[info.r as keyof typeof riskColors]} text-[10px] font-bold py-3 uppercase">
                     {info.n || tag.replace('en:', '')}
                   </span>
-                  <div class="absolute bottom-full mb-2 hidden group-hover:block z-10 bg-gray-800 text-white p-2 rounded text-[10px] whitespace-nowrap">
-                  </div>
                 </div>
               {/each}
             </div>
