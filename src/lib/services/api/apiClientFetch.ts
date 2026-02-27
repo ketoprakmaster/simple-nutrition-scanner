@@ -5,12 +5,15 @@ const HEADERS = {
 }
 
 export async function productFetch(code: string) {
-    console.log("fetching product with code: " + code)
+    const start = performance.now();
 
     const res = await fetch(
         `https://world.openfoodfacts.org/api/v2/product/${code}.json`,
         { headers: HEADERS }
     );
+
+    const duration = (performance.now() - start).toFixed(0);
+    console.log(`[Network] Fetch for ${code} finished in ${duration}ms (Status: ${res.status})`);
 
     return res;
 }

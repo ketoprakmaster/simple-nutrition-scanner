@@ -1,5 +1,6 @@
 <script lang="ts">
     import { ProductAnalysis } from "$lib/models/productAnalysis";
+    import CircleCheck from "@lucide/svelte/icons/circle-check";
 
     let { analysis } : {analysis: ProductAnalysis} = $props()
 </script>
@@ -8,32 +9,26 @@
 {#if analysis.nutrients.length}
 	<div class="bg-base-100 rounded-3xl p-5 shadow-sm">
 	    <h3 class="font-bold mb-4 flex items-center gap-2">
-	        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+					<CircleCheck class='text-primary'/>
 	        Analysis (per 100g)
 	    </h3>
 
-	    <div class="space-y-4">
-	        {#each analysis?.nutrients as point}
-	            {#if point.level}
-	            <div class="flex items-center justify-between">
-	                <div class="flex items-center gap-3">
-	                    <div class="p-1 rounded-full bg-base-200 flex items-center justify-center text-2xl">
-	                        {point.icon}
-	                    </div>
-	                    <div>
-	                        <div class="font-medium">{point.label}</div>
-	                        <div class="text-xs opacity-60">
-	                            {point.displayValue || 0}{point.unit}
-	                        </div>
-	                    </div>
-	                </div>
-	                <div class="flex items-center gap-2">
-	                    <span class="text-sm font-semibold capitalize">{point.levelLabel}</span>
-	                    <div class="w-4 h-4 rounded-full {point.levelColor}"></div>
-	                </div>
-	            </div>
-	            {/if}
-	        {/each}
-	    </div>
+	    <div class="grid grid-cols-2 gap-3">
+		    {#each analysis.nutrients as point}
+		        <div class="bg-base-200/50 rounded-2xl p-3 grid grid-cols-2 items-center text-center ">
+								<div class="flex flex-col">
+			            <span class="text-2xl mb-1">{point.icon}</span>
+			            <span class="text-xs opacity-60 uppercase font-bold tracking-tighter">{point.label}</span>
+								</div>
+								<div class='flex flex-col items-center'>
+										<div class='flex flex-row gap-2'>
+			                <span class="font-black">{point.displayValue} g </span>
+											<div class=" rounded-full w-2 h-2 my-auto {point.levelColor}"></div>
+										</div>
+						        <span class="text-xs uppercase opacity-75">{point.levelLabel}</span>
+								</div>
+		        </div>
+		    {/each}
+			</div>
 	</div>
 {/if}

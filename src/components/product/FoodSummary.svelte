@@ -11,7 +11,7 @@
 
 
 <!-- product image section -->
-<div class="bg-base-100 p-5 pb-12 rounded-b-3xl shadow-sm relative overflow-hidden">
+<div class="bg-base-100 p-5 pb-12 rounded-b-[3rem] shadow-sm relative overflow-hidden">
     <div class="flex flex-col items-center max-w-md mx-auto">
         <div class="relative w-48 h-48 mb-6 group">
            {#if item.product.image_url}

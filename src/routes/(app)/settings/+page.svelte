@@ -4,6 +4,7 @@
     import { APP_ID , APP_NAME, APP_VERSION, DEV_CONTACT } from '$lib/core/appInfo';
     import { copyToClip } from '$lib/utils/helpers/clipboard';
     import { logger } from '$lib/ui/logger.svelte';
+    import { Trash2 } from '@lucide/svelte';
 
     let showConfirm = $state(false);
     let showConsole = $state(false)
@@ -22,12 +23,10 @@
         <div class="bg-base-200 rounded-box overflow-hidden border border-base-300">
             <button
                 onclick={() => showConfirm = true}
-                class="flex items-center justify-between w-full p-4 hover:bg-base-300 transition-colors text-error"
+                class="flex items-center justify-between w-full p-4 hover:bg-base-300 transition-colors text-error cursor-pointer"
             >
                 <div class="flex items-center gap-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
+                    <Trash2/>
                     <span class="font-medium">Clear Scan History</span>
                 </div>
                 <span class="text-xs opacity-50">{productStore.items.length} items</span>

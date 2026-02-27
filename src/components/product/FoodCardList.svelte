@@ -24,9 +24,9 @@
 </script>
 
 {#if items.length === 0}
-  <div class="flex flex-col items-center justify-center p-12 bg-base-100 rounded-3xl shadow-sm border border-base-200">
-    <div class="text-4xl mb-4 opacity-20">🔍</div>
-    <p class="text-sm font-medium text-base-content/40">{messageEmpty}</p>
+  <div class="flex flex-col items-center justify-center p-12 bg-base-200 rounded-3xl shadow-sm border border-base-200">
+    <div class="text-4xl mb-4 opacity-60">🔍</div>
+    <p class="text-sm font-medium text-base-content/60">{messageEmpty}</p>
   </div>
 {:else}
   <div class="flex flex-col gap-4">

@@ -10,7 +10,7 @@
   const stats = $derived({
     total: productStore.items.length,
     healthy: productStore.items.filter(i =>
-      ['a', 'b'].includes(i.product.nutriscore_grade)
+      ['a', 'b'].includes(i.product.nutriscore_grade || 'unknown')
     ).length,
     recent: productStore.items.slice(0, 3)
   });
