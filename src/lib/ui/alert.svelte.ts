@@ -9,21 +9,46 @@ class AlertState {
     }
 
     show(message: string, type: AlertType = 'info', duration = 3000) {
-        const id = ++this._nextId;
+        const existing = this._alerts.find(
+            a => a.message === message && a.type === type
+        );
 
-        if (type === 'error') {
-            console.error(`[UI ALERT] ${message}`);
-        } else if (type === 'warning') {
-            console.warn(`[UI ALERT] ${message}`);
-        } else {
-            console.log(`[UI ALERT] ${message}`);
+        if (existing) {
+            const cooldown = 1000;
+
+            if (existing.date + cooldown < Date.now()) {
+                this.resetTimer(existing, duration);
+                this._alerts = [...this._alerts]; // needed for svelte reactivity
+            }
+
+            return;
         }
 
-        this._alerts = [...this._alerts, { id, type, message }];
+        const id = ++this._nextId;
 
-        setTimeout(() => {
-            this._alerts = this._alerts.filter(a => a.id !== id);
+        const alert: Alert = {
+            id, type, message, date: Date.now()
+        };
+
+        this._alerts = [...this._alerts, alert];
+
+        this.resetTimer(alert, duration);
+    }
+
+    dismiss(id: number) {
+        this._alerts = this._alerts.filter(a => a.id !== id);
+    }
+
+    private resetTimer(alert: Alert, duration: number) {
+        if (alert.timeoutId) {
+            clearTimeout(alert.timeoutId);
+        }
+
+        alert.timeoutId = setTimeout(() => {
+            this.dismiss(alert.id);
         }, duration);
+
+        alert.date = Date.now();
     }
 }
 

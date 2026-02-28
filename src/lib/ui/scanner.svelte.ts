@@ -83,6 +83,10 @@ class ScannerController {
                     break;
 
                 case "blacklisted":
+                    ui.show(
+                        `code has been blacklisted`,
+                        "warning",
+                    );
                     break;
 
                 case "error":

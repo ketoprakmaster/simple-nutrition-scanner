@@ -2,7 +2,7 @@
     import { ui } from '$lib/ui/alert.svelte';
     import { fly } from 'svelte/transition';
     import { flip } from 'svelte/animate';
-    import { Ban, TriangleAlert, Info, Check, type Icon as IconType } from '@lucide/svelte'
+    import { Ban, TriangleAlert, Info, Check, CircleX, type Icon as IconType } from '@lucide/svelte'
 
     const icons: Record<string, typeof IconType> = {
         success: Check,
@@ -30,6 +30,12 @@
         >
             <Icons/>
             <span class="text-sm font-bold tracking-tight">{alert.message}</span>
+            <button
+                class="ml-auto opacity-60 hover:opacity-100"
+                on:click={() => ui.dismiss(alert.id)}
+            >
+                <CircleX/>
+            </button>
         </div>
     {/each}
 </div>
