@@ -38,6 +38,7 @@ class ScannerController {
     async processImage(file: File) {
         if (this.isProcessing) return;
 
+        console.log("[scanner] process image: "+ file.name)
         const code = await this.#engine.decodeImage(file);
 
         if (!code) {
@@ -51,6 +52,7 @@ class ScannerController {
     async #handleCode(code: string) {
         if (this.isProcessing || !this.isActive) return;
 
+        console.log(`[scanner] process code: ${code}`)
         this.isProcessing = true;
 
         try {
