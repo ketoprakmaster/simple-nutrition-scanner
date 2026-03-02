@@ -1,5 +1,8 @@
 import type { Alert, AlertType} from '$lib/types/alert';
 
+// prevent refresh spam
+const REFRESH_COOLDOWN = 1000
+
 class AlertState {
     private _alerts = $state<Alert[]>([]);
     private _nextId = 0;
@@ -14,41 +17,47 @@ class AlertState {
         );
 
         if (existing) {
-            const cooldown = 1000;
-
-            if (existing.date + cooldown < Date.now()) {
-                this.resetTimer(existing, duration);
-                this._alerts = [...this._alerts]; // needed for svelte reactivity
-            }
-
-            return;
+            this.resetTimer(existing, duration);
+            return
         }
 
         const id = ++this._nextId;
 
-        const alert: Alert = {
+        this._alerts.push({
             id, type, message, date: Date.now()
-        };
+        });
 
-        this._alerts = [...this._alerts, alert];
-
-        this.resetTimer(alert, duration);
+        this.addTimer(this._alerts.at(-1)!, duration);
     }
 
     dismiss(id: number) {
-        this._alerts = this._alerts.filter(a => a.id !== id);
+        const index = this._alerts.findIndex(a => a.id === id);
+        if (index !== -1) {
+            const alert = this._alerts[index];
+            // Clean up
+            if (alert.timeoutId) clearTimeout(alert.timeoutId);
+            this._alerts.splice(index, 1);
+        }
     }
 
     private resetTimer(alert: Alert, duration: number) {
+        if (alert.date + REFRESH_COOLDOWN > Date.now()) {
+            return;
+        }
+
         if (alert.timeoutId) {
             clearTimeout(alert.timeoutId);
         }
 
+        alert.date = Date.now();
+
+        this.addTimer(alert, duration);
+    }
+
+    private addTimer(alert: Alert , duration: number) {
         alert.timeoutId = setTimeout(() => {
             this.dismiss(alert.id);
         }, duration);
-
-        alert.date = Date.now();
     }
 }
 
