@@ -5,7 +5,7 @@
     function handleFileChange(e: Event) {
         const input = e.target as HTMLInputElement;
         if (input.files?.length) {
-            Scanner.processImage(input.files[0]);
+            Scanner.processImage(input.files.item(0));
         }
     }
 </script>

@@ -14,13 +14,6 @@ class ThemeController {
 
             this.apply();
         }
-
-        // Reactively sync changes
-        $effect.root(() => {
-            $effect(() => {
-                this.apply();
-            });
-        });
     }
 
     get isDark() {
@@ -29,10 +22,12 @@ class ThemeController {
 
     toggle() {
         this.theme = this.isDark ? 'light' : 'dark';
+        this.apply();
     }
 
     set(theme: 'light' | 'dark') {
         this.theme = theme;
+        this.apply();
     }
 
     private apply() {

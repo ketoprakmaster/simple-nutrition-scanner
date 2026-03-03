@@ -23,9 +23,11 @@ class ScannerController {
                 }
             });
 
-            this.isActive = true;
         } catch (err: any) {
             this.#handleCameraError(err);
+
+        } finally {
+            this.isActive = true;
         }
     }
 
@@ -35,8 +37,8 @@ class ScannerController {
         this.isProcessing = false;
     }
 
-    async processImage(file: File) {
-        if (this.isProcessing) return;
+    async processImage(file: File | null) {
+        if (this.isProcessing || !file) return;
 
         console.log("[scanner] process image: "+ file.name)
         const code = await this.#engine.decodeImage(file);
@@ -52,7 +54,6 @@ class ScannerController {
     async #handleCode(code: string) {
         if (this.isProcessing || !this.isActive) return;
 
-        console.log(`[scanner] process code: ${code}`)
         this.isProcessing = true;
 
         try {
@@ -86,7 +87,7 @@ class ScannerController {
 
                 case "blacklisted":
                     ui.show(
-                        `code has been blacklisted`,
+                        `product not found.`,
                         "warning",
                     );
                     break;

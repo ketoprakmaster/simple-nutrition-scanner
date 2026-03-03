@@ -27,6 +27,8 @@ class AlertState {
             id, type, message, date: Date.now()
         });
 
+        this.consoleMsg(message, type);
+
         this.addTimer(this._alerts.at(-1)!, duration);
     }
 
@@ -58,6 +60,16 @@ class AlertState {
         alert.timeoutId = setTimeout(() => {
             this.dismiss(alert.id);
         }, duration);
+    }
+
+    private consoleMsg(message: string, type: AlertType) {
+        if (type === 'error') {
+            console.error(`[UI ALERT] ${message}`);
+        } else if (type === 'warning') {
+            console.warn(`[UI ALERT] ${message}`);
+        } else {
+            console.log(`[UI ALERT] ${message}`);
+        }
     }
 }
 
