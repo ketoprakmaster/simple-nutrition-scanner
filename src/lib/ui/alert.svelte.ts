@@ -1,4 +1,5 @@
 import type { Alert, AlertType} from '$lib/types/alert';
+import { logger } from "./logger.svelte";
 
 // prevent refresh spam
 const REFRESH_COOLDOWN = 1000
@@ -64,11 +65,11 @@ class AlertState {
 
     private consoleMsg(message: string, type: AlertType) {
         if (type === 'error') {
-            console.error(`[UI ALERT] ${message}`);
+            logger.error(`[UI ALERT] ${message}`);
         } else if (type === 'warning') {
-            console.warn(`[UI ALERT] ${message}`);
+            logger.warn(`[UI ALERT] ${message}`);
         } else {
-            console.log(`[UI ALERT] ${message}`);
+            logger.log(`[UI ALERT] ${message}`);
         }
     }
 }

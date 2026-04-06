@@ -1,4 +1,5 @@
 import { ui } from "$lib/ui/alert.svelte";
+import { logger } from "$lib/ui/logger.svelte";
 import Quagga from "@ericblade/quagga2";
 
 class ToggleTorch {
@@ -34,7 +35,7 @@ class ToggleTorch {
     }
 
     async #handleError(error: any) {
-        console.error('Torch control failed:', error);
+        logger.error('Torch control failed:', error);
         ui.show('Torch not available on this device',"error");
     }
 }

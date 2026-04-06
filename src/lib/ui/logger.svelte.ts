@@ -4,30 +4,30 @@ class LogManager {
     logs = $state<string[]>([]);
     maxLogs = 100; // Prevent memory issues
 
-    constructor() {
-        if (typeof window === 'undefined') return;
+    #addEntry(method: string, args: any[]) {
+        const timestamp = new Date().toLocaleTimeString();
+        const message = args.map(arg =>
+            typeof arg === 'object' ? JSON.stringify(arg) : String(arg)
+        ).join(' ');
+        const entry = `[${timestamp}] [${method.toUpperCase()}] ${message}`;
 
-        // Capture standard console methods
-        const methods: ('log' | 'warn' | 'error')[] = ['log', 'warn', 'error'];
+        // Update Svelte state (keeping it under the limit)
+        this.logs = [entry, ...this.logs].slice(0, this.maxLogs);
+    }
 
-        methods.forEach(method => {
-            const original = console[method];
-            console[method] = (...args: any[]) => {
-                // 1. Call the original so you still see it in dev tools
-                original.apply(console, args);
+    log(...args: any[]) {
+        console.log(...args);
+        this.#addEntry('log', args);
+    }
 
-                // 2. Format and save to our state
-                const timestamp = new Date().toLocaleTimeString();
-                const message = args.map(arg =>
-                    typeof arg === 'object' ? JSON.stringify(arg) : String(arg)
-                ).join(' ');
+    warn(...args: any[]) {
+        console.warn(...args);
+        this.#addEntry('warn', args);
+    }
 
-                const entry = `[${timestamp}] [${method.toUpperCase()}] ${message}`;
-
-                // Update Svelte state (keeping it under the limit)
-                this.logs = [entry, ...this.logs].slice(0, this.maxLogs);
-            };
-        });
+    error(...args: any[]) {
+        console.error(...args);
+        this.#addEntry('error', args);
     }
 
     get rawLogs() {

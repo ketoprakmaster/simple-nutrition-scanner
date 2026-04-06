@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { Download } from '@lucide/svelte'
+	import { logger } from '$lib/ui/logger.svelte';
 
 	let deferredPrompt = $state<any>(null);
 	let canInstall = $state(false);
@@ -25,7 +26,7 @@
 		const { outcome } = await deferredPrompt.userChoice;
 
 		if (outcome === 'accepted') {
-			console.log('User accepted the install prompt');
+			logger.log('User accepted the install prompt');
 		}
 
 		deferredPrompt = null;

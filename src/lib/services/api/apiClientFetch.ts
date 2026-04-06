@@ -1,4 +1,5 @@
 import { APP_NAME, APP_VERSION, APP_ID, DEV_CONTACT } from "$lib/core/appInfo";
+import { logger } from "$lib/ui/logger.svelte";
 
 const HEADERS = {
     "User-Agent": `${APP_NAME}/${APP_VERSION} APP_ID=${APP_ID} (${DEV_CONTACT})`
@@ -13,7 +14,7 @@ export async function productFetch(code: string) {
     );
 
     const duration = (performance.now() - start).toFixed(0);
-    console.log(`[Network] Fetch for ${code} finished in ${duration}ms (Status: ${res.status})`);
+    logger.log(`[Network] Fetch for ${code} finished in ${duration}ms (Status: ${res.status})`);
 
     return res;
 }

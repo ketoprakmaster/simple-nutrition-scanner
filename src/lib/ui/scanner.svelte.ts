@@ -3,6 +3,7 @@ import { ScannerEngine } from "$lib/services/scannerEngine";
 import { ProductService } from "$lib/services/productService";
 import { ProductRepository } from "$lib/services/productRepository";
 import { ui } from "./alert.svelte";
+import { logger } from "./logger.svelte";
 import { goto } from "$app/navigation";
 import { resolve } from "$app/paths";
 
@@ -40,7 +41,7 @@ class ScannerController {
     async processImage(file: File | null) {
         if (this.isProcessing || !file) return;
 
-        console.log("[scanner] process image: "+ file.name)
+        logger.log("[scanner] process image: "+ file.name)
         const code = await this.#engine.decodeImage(file);
 
         if (!code) {
