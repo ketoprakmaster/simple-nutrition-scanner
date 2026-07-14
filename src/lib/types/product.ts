@@ -1,6 +1,8 @@
 export type NutriScoreGrade =
     "a" | "b" | "c" | "d" | "e" | "unknown";
 
+export type NutrientLevel = "low" | "moderate" | "high";
+
 export type Product = {
     code: string;
     product: {
@@ -17,10 +19,10 @@ export type Product = {
         additives_tags?: string[];
         labels_tags?: string[];
         nutrient_levels?: {
-            fat?: "low" | "moderate" | "high";
-            salt?: "low" | "moderate" | "high";
-            "saturated-fat"?: "low" | "moderate" | "high";
-            sugars?: "low" | "moderate" | "high";
+            fat?: NutrientLevel;
+            salt?: NutrientLevel;
+            "saturated-fat"?: NutrientLevel;
+            sugars?: NutrientLevel;
         };
         nutriments: Record<string, number | string>;
     };

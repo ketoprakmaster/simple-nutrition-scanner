@@ -14,8 +14,9 @@
     // Icons
     import TriangleAlert from '@lucide/svelte/icons/triangle-alert';
     import CircleArrowLeft from '@lucide/svelte/icons/circle-arrow-left';
+    import { onMount } from 'svelte';
 
-    $effect(() => {
+    onMount(() => {
         const id = page.params.id;
         if (id) productStore.ensure(id);
     });

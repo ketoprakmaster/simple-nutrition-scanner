@@ -15,17 +15,17 @@
 
 	    <div class="grid grid-cols-2 gap-3">
 		    {#each analysis.nutrients as point}
-		        <div class="bg-base-200/50 rounded-2xl p-3 grid grid-cols-2 items-center text-center ">
+		        <div class="bg-base-200 rounded-2xl p-3 grid grid-cols-2 items-center text-center ">
 								<div class="flex flex-col">
 			            <span class="text-2xl mb-1">{point.icon}</span>
 			            <span class="text-xs opacity-60 uppercase font-bold tracking-tighter">{point.label}</span>
 								</div>
 								<div class='flex flex-col items-center'>
 										<div class='flex flex-row gap-2'>
-			                <span class="font-black">{point.displayValue} g </span>
-											<div class=" rounded-full w-2 h-2 my-auto {point.levelColor}"></div>
+			                <span class="font-black uppercase">{point.value} {point.unit}</span>
+											<div class=" rounded-full w-2 h-2 my-auto {point.color}"></div>
 										</div>
-						        <span class="text-xs uppercase opacity-75">{point.levelLabel}</span>
+						        <span class="text-xs uppercase opacity-75">{point.level}</span>
 								</div>
 		        </div>
 		    {/each}

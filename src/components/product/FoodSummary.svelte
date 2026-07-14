@@ -46,11 +46,11 @@
         <!-- score circle -->
         <div class="flex items-center gap-6">
 	        <div
-						class="radial-progress border-8 border-base-300 {analysis?.colorClass}"
-						style="--value:{analysis?.scoreValue}; --size:6rem; --thickness: 0.5rem;"
+						class="radial-progress border-8 border-base-300 text-{analysis.rating.color}"
+						style="--value:{analysis.score}; --size:6rem; --thickness: 0.5rem;"
 						role="progressbar"
 					>
-						<span class="text-4xl font-black">{analysis?.scoreValue}</span>
+						<span class="text-4xl font-black">{analysis.score}</span>
             </div>
 
             <div class="flex flex-col border-l pl-4 border-base-content/10">
@@ -59,7 +59,7 @@
                     <span class="text-3xl font-black">{getCalories(item).value || "N/A"}</span>
                     <span class="text-sm font-bold opacity-60">kcal</span>
                 </div>
-                <span class="text-lg font-medium {analysis?.colorClass}">{analysis.scoreLabel} Score</span>
+                <span class="text-lg font-medium text-{analysis.rating.color}">{analysis.rating.label} Score</span>
             </div>
         </div>
     </div>

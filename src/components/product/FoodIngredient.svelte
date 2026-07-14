@@ -5,7 +5,6 @@
 </script>
 
 
-
 {#if item.product.ingredients_text_en}
   <div class="bg-base-100 rounded-3xl p-5 shadow-sm">
       <h3 class="font-bold mb-2">Ingredients</h3>

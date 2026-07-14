@@ -19,5 +19,12 @@ export function getCalories(item: Product) {
         };
     }
 
+    if (item.product.nutriments['energy-kcal_prepared_100g'] !== undefined) {
+        return {
+            value: Math.round(Number(item.product.nutriments['energy-kcal_prepared_100g']) * 0.239),
+            unit: 'kcal'
+        };
+    }
+
     return { value: 0, unit: 'kcal' };
 }

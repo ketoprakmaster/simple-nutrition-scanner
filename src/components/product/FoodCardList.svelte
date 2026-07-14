@@ -52,14 +52,14 @@
             {item.product.brands || 'No Brand'}
           </p>
           <div class="flex items-center gap-1 mt-1">
-             <div class="w-2 h-2 rounded-full {info.BgClass}"></div>
-             <span class="text-[10px] font-bold uppercase opacity-60 tracking-wider">Score: {info.scoreLabel }</span>
+             <div class="w-2 h-2 rounded-full {info.rating.color}"></div>
+             <span class="text-[10px] font-bold uppercase opacity-60 tracking-wider">Score: {info.rating.label }</span>
           </div>
         </div>
 
         <div class="flex items-center gap-2">
-          <div class="radial-progress border-4 border-base-300 {info.colorClass}" style="--value:{info.scoreValue}; --size:2.5rem; --thickness: 4px;" role="progressbar">
-            <span class="text-[10px] font-black text-base-content">{info.scoreValue}</span>
+          <div class="radial-progress border-4 border-base-300 text-{info.rating.color}" style="--value:{info.score}; --size:2.5rem; --thickness: 4px;" role="progressbar">
+            <span class="text-[10px] font-black text-base-content">{info.rating.score}</span>
           </div>
 
           {#if toggleDelete}

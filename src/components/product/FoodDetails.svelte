@@ -4,12 +4,17 @@
     import additivesMap from '$lib/data/additives-min.json';
     import CircleQuestionMark from "@lucide/svelte/icons/circle-question-mark";
 
-    // filter the score so it doesn't show "unknown" or "not-apliclable"
     const BaseScore: string [] = ['a', 'b', 'c', 'd', 'e'];
     type Props = { item: Product; analysis: ProductAnalysis };
     let { item, analysis }: Props = $props();
 
-    // Helper to get risk info for a specific additive tag
+    const novaLabels: Record<number, string> = {
+        1: 'Unprocessed',
+        2: 'Processed',
+        3: 'Ultra processed',
+        4: 'Ultra processed'
+    };
+
     const getRisk = (tag: string) => {
         return (additivesMap as Record<string, {r: number, n: string}>)[tag] || { r: 0, n: tag.replace('en:', '') };
     };
@@ -30,16 +35,16 @@
      </h3>
 
      <div class="space-y-4">
-         {#if analysis.nova.group}
+         {#if item.product.nova_group}
          <div class="flex items-center justify-between text-sm">
              <div class="flex items-center gap-3">
                  <div class="w-8 h-8 rounded-lg bg-yellow-100 flex items-center justify-center text-sm font-bold text-yellow-700">
-                     {analysis.nova.group}
+                     {item.product.nova_group}
                  </div>
                  <span class="font-medium">Processing (NOVA)</span>
              </div>
              <div class="text-xs opacity-50 max-w-37.5 text-right">
-                 {analysis.nova.label}
+                 {novaLabels[item.product.nova_group] || 'Unknown'}
              </div>
          </div>
          {/if}
@@ -62,7 +67,7 @@
          {#if item.product.additives_tags && item.product.additives_tags.length > 0}
             <div class="flex items-center justify-between mb-3">
               <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-lg {analysis.scoreValue < 50 ? 'bg-red-100 text-red-700' : 'bg-orange-100 text-orange-700'} flex items-center justify-center text-sm font-bold">
+                <div class="w-8 h-8 rounded-lg {analysis.score < 50 ? 'bg-red-100 text-red-700' : 'bg-orange-100 text-orange-700'} flex items-center justify-center text-sm font-bold">
                     !
                 </div>
                 <span class="font-medium">Additives ({item.product.additives_tags.length})</span>
