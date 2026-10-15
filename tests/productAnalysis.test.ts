@@ -75,6 +75,26 @@ describe("ProductAnalysis", () => {
             ]);
         });
 
+        it("never labels a worse grade with a better rating than a milder one", () => {
+            const rated = (["a", "b", "c", "d", "e"] as const).map(grade => {
+                const analysis = new ProductAnalysis(product({ nutriscore_grade: grade }), {
+                    useCustomScore: "nutriscore"
+                });
+                return { grade, score: analysis.score, rating: analysis.rating };
+            });
+
+            // Nutri-Score grades are ordered best-to-worst, so the numeric score and
+            // the star rating have to descend together.
+            for (let i = 1; i < rated.length; i++) {
+                expect(rated[i].score, `score for ${rated[i].grade}`).toBeLessThan(rated[i - 1].score);
+            }
+
+            expect(rated.map(r => r.rating.grade)).toEqual(["A", "B", "C", "D", "E"]);
+            expect(rated.map(r => r.rating.label)).toEqual([
+                "Excellent", "Good", "Mediocre", "Poor", "Very Poor"
+            ]);
+        });
+
         it("follows the global setting when no override is given", () => {
             const item = toProduct(organicAlmonds);
 

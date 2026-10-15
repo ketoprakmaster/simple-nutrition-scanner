@@ -1,10 +1,20 @@
+import type { ScoreFunction } from "$lib/types/product";
+
+const SCORE_FUNCTIONS: readonly ScoreFunction[] = ["nutriscore", "app"];
+
+/** Stored values are untrusted: an older build could have written anything. */
+function readScoreFunction(): ScoreFunction {
+    const stored = localStorage.getItem('score_func');
+    return SCORE_FUNCTIONS.includes(stored as ScoreFunction) ? (stored as ScoreFunction) : 'nutriscore';
+}
+
 class GlobalSettings {
     appName = $state(localStorage.getItem('app_name') || 'Leeka');
     showNutriscoreOnCards = $state(localStorage.getItem('show_nutriscore') !== 'false');
     landingTitle = $state(localStorage.getItem('landing_title') || 'Hello!')
     landingSubtitle = $state(localStorage.getItem('landing_subtitle') || "Ready to see what's inside your food today?")
     instanceId = $state(localStorage.getItem('instance_id') || this.generateID());
-    useCustomScore = $state(localStorage.getItem('score_func') || 'nutriscore');
+    useCustomScore = $state<ScoreFunction>(readScoreFunction());
 
     // Sync changes to localStorage whenever they happen
     constructor() {

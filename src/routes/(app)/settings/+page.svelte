@@ -49,14 +49,14 @@
                     Nutri-Score
                 </button>
                 <button
-                    class="join-item btn btn-sm flex-1 {settings.useCustomScore === 'appscore' ? 'btn-accent' : ''}"
-                    onclick={() => settings.useCustomScore = 'appscore'}
+                    class="join-item btn btn-sm flex-1 {settings.useCustomScore === 'app' ? 'btn-accent' : ''}"
+                    onclick={() => settings.useCustomScore = 'app'}
                 >
                     App Analysis
                 </button>
             </div>
 
-            {#if settings.useCustomScore === 'appscore'}
+            {#if settings.useCustomScore === 'app'}
                 <div class="mt-4 p-3 bg-base-300/50 rounded-lg border border-white/5">
                     <ul class="text-[11px] space-y-1 opacity-70">
                         <li class="flex items-center gap-2">✓ Nutri-Score (60%)</li>

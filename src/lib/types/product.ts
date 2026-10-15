@@ -6,8 +6,16 @@ export type EcoScoreGrade = "a" | "b" | "c" | "d" | "e";
 
 export type NutrientLevel = "low" | "moderate" | "high";
 
+/**
+ * Which formula produces the displayed score. `"app"` is the additive-aware
+ * App Analysis; `"nutriscore"` mirrors the published Nutri-Score grade.
+ */
+export type ScoreFunction = "nutriscore" | "app";
+
 export type Product = {
     code: string;
+    /** Epoch milliseconds of the first successful lookup; absent on rows stored before this field existed. */
+    scannedAt?: number;
     product: {
         product_name: string;
         brands?: string;
