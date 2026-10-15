@@ -11,7 +11,7 @@ class ProductStore {
     current = $state<Product | undefined>();
 
     #repo = new ProductRepository();
-    #service = new ProductService(this.#repo);
+    #service = new ProductService({ repo: this.#repo });
 
     constructor() {
         this.#repo.stream().subscribe((products) => {

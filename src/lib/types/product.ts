@@ -1,6 +1,9 @@
 export type NutriScoreGrade =
     "a" | "b" | "c" | "d" | "e" | "unknown";
 
+/** Eco-Score letters as published by Open Food Facts; non-grades are dropped at parse time. */
+export type EcoScoreGrade = "a" | "b" | "c" | "d" | "e";
+
 export type NutrientLevel = "low" | "moderate" | "high";
 
 export type Product = {
@@ -13,7 +16,7 @@ export type Product = {
         nutriscore_grade?: NutriScoreGrade;
         nutriscore_score?: number;
         nova_group?: number;
-        ecoscore_grade?: string;
+        ecoscore_grade?: EcoScoreGrade;
         ingredients_text_en?: string;
         ingredients_text?: string;
         additives_tags?: string[];

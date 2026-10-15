@@ -1,12 +1,10 @@
 <script lang="ts">
     import type { Product } from "$lib/types/product";
-    import { ProductAnalysis } from "$lib/models/productAnalysis";
-    import additivesMap from '$lib/data/additives-min.json';
+    import type { ProductAnalysis } from "$lib/models/productAnalysis";
+    import type { AdditiveRisk } from "$lib/services/additiveService";
     import CircleQuestionMark from "@lucide/svelte/icons/circle-question-mark";
 
-    const BaseScore: string [] = ['a', 'b', 'c', 'd', 'e'];
-    type Props = { item: Product; analysis: ProductAnalysis };
-    let { item, analysis }: Props = $props();
+    type Props = { item: Product; analysis: ProductAnalysis };    let { item, analysis }: Props = $props();
 
     const novaLabels: Record<number, string> = {
         1: 'Unprocessed',
@@ -15,11 +13,7 @@
         4: 'Ultra processed'
     };
 
-    const getRisk = (tag: string) => {
-        return (additivesMap as Record<string, {r: number, n: string}>)[tag] || { r: 0, n: tag.replace('en:', '') };
-    };
-
-    const riskColors = {
+    const riskColors: Record<AdditiveRisk, string> = {
         3: 'bg-red-100 text-red-700 border-red-200',
         2: 'bg-orange-100 text-orange-700 border-orange-200',
         1: 'bg-yellow-100 text-yellow-700 border-yellow-200',
@@ -35,16 +29,16 @@
      </h3>
 
      <div class="space-y-4">
-         {#if item.product.nova_group}
+         {#if analysis.novaGroup}
          <div class="flex items-center justify-between text-sm">
              <div class="flex items-center gap-3">
                  <div class="w-8 h-8 rounded-lg bg-yellow-100 flex items-center justify-center text-sm font-bold text-yellow-700">
-                     {item.product.nova_group}
+                     {analysis.novaGroup}
                  </div>
                  <span class="font-medium">Processing (NOVA)</span>
              </div>
              <div class="text-xs opacity-50 max-w-37.5 text-right">
-                 {novaLabels[item.product.nova_group] || 'Unknown'}
+                 {novaLabels[analysis.novaGroup] || 'Unknown'}
              </div>
          </div>
          {/if}
@@ -53,7 +47,7 @@
          <div class="flex items-center justify-between text-sm">
              <div class="flex items-center gap-3">
                  <div class="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center text-sm font-bold text-green-700 uppercase">
-                     {BaseScore.includes(item.product.ecoscore_grade.toLowerCase()) ? item.product.ecoscore_grade : "?"}
+                     {item.product.ecoscore_grade}
                  </div>
                  <span class="font-medium">Eco-Score</span>
              </div>
@@ -64,22 +58,21 @@
          <div class="divider my-1"></div>
 
          <div class="text-sm">
-         {#if item.product.additives_tags && item.product.additives_tags.length > 0}
+         {#if analysis.additives.length > 0}
             <div class="flex items-center justify-between mb-3">
               <div class="flex items-center gap-3">
                 <div class="w-8 h-8 rounded-lg {analysis.score < 50 ? 'bg-red-100 text-red-700' : 'bg-orange-100 text-orange-700'} flex items-center justify-center text-sm font-bold">
                     !
                 </div>
-                <span class="font-medium">Additives ({item.product.additives_tags.length})</span>
+                <span class="font-medium">Additives ({analysis.additives.length})</span>
               </div>
             </div>
 
             <div class="flex flex-wrap gap-2">
-              {#each item.product.additives_tags as tag}
-                {@const info = getRisk(tag)}
+              {#each analysis.additives as additive (additive.tag)}
                 <div class="group relative">
-                  <span class="badge badge-sm border {riskColors[info.r as keyof typeof riskColors]} text-[10px] font-bold py-3 uppercase">
-                    {info.n || tag.replace('en:', '')}
+                  <span class="badge badge-sm border {riskColors[additive.risk]} text-[10px] font-bold py-3 uppercase" title={additive.tag}>
+                    {additive.name}
                   </span>
                 </div>
               {/each}

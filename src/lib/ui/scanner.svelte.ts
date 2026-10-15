@@ -12,7 +12,7 @@ class ScannerController {
     isProcessing = $state(false);
 
     #engine = new ScannerEngine();
-    #service = new ProductService(new ProductRepository());
+    #service = new ProductService({ repo: new ProductRepository() });
 
     async start(target: HTMLElement) {
         if (this.isActive) return;

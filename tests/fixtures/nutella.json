@@ -1,0 +1,66 @@
+{
+  "status": 1,
+  "status_verbose": "product found",
+  "code": "3017620422003",
+  "product": {
+    "code": "3017620422003",
+    "product_name": "Nutella",
+    "brands": "Nutella, Ferrero",
+    "image_front_url": "https://images.openfoodfacts.org/images/products/301/762/042/2003/front_en.879.400.jpg",
+    "ingredients_text_en": "Sugar, vegetable fat (palm), hazelnuts (13%), skimmed milk powder (8.7%), fat-reduced cocoa powder (7.4%), emulsifier: lecithins (soya), flavouring (vanillin).",
+    "nutriments": {
+      "energy": 2252,
+      "energy-kcal": 539,
+      "energy-kcal_100g": 539,
+      "energy-kcal_unit": "kcal",
+      "energy-kcal_value": 539,
+      "energy-kj": 2252,
+      "energy-kj_100g": 2252,
+      "energy-kj_unit": "kJ",
+      "energy-kj_value": 2252,
+      "energy_100g": 2252,
+      "energy_unit": "kJ",
+      "energy_value": 2252,
+      "fat": 30.9,
+      "fat_100g": 30.9,
+      "fat_unit": "g",
+      "fat_value": 30.9,
+      "salt": 0.107,
+      "salt_100g": 0.107,
+      "salt_unit": "g",
+      "salt_value": 0.107,
+      "saturated-fat": 10.6,
+      "saturated-fat_100g": 10.6,
+      "saturated-fat_unit": "g",
+      "saturated-fat_value": 10.6,
+      "sodium": 0.0428,
+      "sodium_100g": 0.0428,
+      "sodium_modifier": "~",
+      "sodium_unit": "g",
+      "sodium_value": 0.0428,
+      "sugars": 56.3,
+      "sugars_100g": 56.3,
+      "sugars_unit": "g",
+      "sugars_value": 56.3
+    },
+    "nutriscore_grade": "e",
+    "nutriscore_score": 31,
+    "nova_group": 4,
+    "ecoscore_grade": "unknown",
+    "additives_tags": [
+      "en:e322",
+      "en:e322i"
+    ],
+    "labels_tags": [
+      "en:vegetarian",
+      "en:no-gluten",
+      "fr:triman"
+    ],
+    "nutrient_levels": {
+      "fat": "high",
+      "salt": "low",
+      "saturated-fat": "high",
+      "sugars": "high"
+    }
+  }
+}

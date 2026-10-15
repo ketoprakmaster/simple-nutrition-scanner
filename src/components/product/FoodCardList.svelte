@@ -37,8 +37,8 @@
         class="group relative flex items-center bg-base-200/50 rounded-xl p-4 shadow-sm border border-base-300 active:scale-[0.98] transition-all hover:border-primary/25 hover:shadow-md"
       >
         <div class="relative h-16 w-16 min-w-16 overflow-hidden rounded-xl bg-base-content/10 flex items-center justify-center shadow-inner">
-          {#if item.product.image_url}
-            <img src={item.product.image_url} alt={item.product.product_name} class="h-full w-full object-cover" crossorigin="anonymous"/>
+          {#if info.imageUrl}
+            <img src={info.imageUrl} alt={info.name} class="h-full w-full object-cover" crossorigin="anonymous"/>
           {:else}
             <span class="text-2xl">🛒</span>
           {/if}
@@ -46,10 +46,10 @@
 
         <div class="flex-1 px-4 overflow-hidden text-left">
           <h3 class="font-bold text-sm text-base-content line-clamp-1 leading-snug">
-            {item.product.product_name}
+            {info.name}
           </h3>
           <p class="text-xs font-medium opacity-50 truncate">
-            {item.product.brands || 'No Brand'}
+            {info.brands}
           </p>
           <div class="flex items-center gap-1 mt-1">
              <div class="w-2 h-2 rounded-full {info.rating.color}"></div>
@@ -59,7 +59,7 @@
 
         <div class="flex items-center gap-2">
           <div class="radial-progress border-4 border-base-300 text-{info.rating.color}" style="--value:{info.score}; --size:2.5rem; --thickness: 4px;" role="progressbar">
-            <span class="text-[10px] font-black text-base-content">{info.rating.score}</span>
+            <span class="text-[10px] font-black text-base-content">{info.rating.grade}</span>
           </div>
 
           {#if toggleDelete}
