@@ -147,6 +147,33 @@ describe("ProductService ingestion", () => {
         expect(await service.lookup("1234567890123")).toEqual({ type: "rate_limited" });
     });
 
+    it("reports a 503 as rate limited, not as a malformed response", async () => {
+        // Open Food Facts applies 503 to an endpoint that is globally over its
+        // limit, so it is a back-off signal rather than a broken payload.
+        const { service } = serviceWith(new Response("busy", { status: 503 }));
+
+        expect(await service.lookup("1234567890123")).toEqual({ type: "rate_limited" });
+    });
+
+    it("does not spend the network allowance on a product served from the database", async () => {
+        const stored = nutella.product as unknown as Product["product"];
+        const { store } = createStore({ code: "3017620422003", product: stored });
+        // One slot only: if the cached read below consumed it, the network read
+        // that follows would come back rate limited instead of working.
+        const limiter = new SlidingWindowLimiter(1, 60_000);
+        const fetchImpl = vi.fn(async () => jsonResponse(nutella));
+        const service = new ProductService({ repo: store, fetchImpl, limiter });
+
+        expect(await service.lookup("3017620422003")).toMatchObject({ type: "found", fromCache: true });
+
+        expect(await service.lookup("9999999999999")).toEqual({
+            type: "found",
+            code: "3017620422003",
+            fromCache: false
+        });
+        expect(fetchImpl).toHaveBeenCalledTimes(1);
+    });
+
     it("reports a transport failure with its message", async () => {
         const { service } = serviceWith(new Error("Connection failed"));
 
