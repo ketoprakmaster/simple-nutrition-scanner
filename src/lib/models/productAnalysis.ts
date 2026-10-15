@@ -38,6 +38,15 @@ export type CalorieInfo = {
 
 const NUTRI_POINTS: Record<NutriScoreGrade, number> = { a: 60, b: 45, c: 30, d: 15, e: 0, unknown: 0 };
 const NUTRI_SCORE_UI: Record<NutriScoreGrade, number> = { a: 100, b: 75, c: 50, d: 25, e: 10, unknown: 0 };
+/** The star rating for each published Nutri-Score letter. */
+const RATING_BY_GRADE: Record<NutriScoreGrade, Rating> = {
+    a: { grade: "A", label: "Excellent", color: "green-600", hex: "#16a34a" },
+    b: { grade: "B", label: "Good", color: "green-500", hex: "#22c55e" },
+    c: { grade: "C", label: "Mediocre", color: "yellow-500", hex: "#eab308" },
+    d: { grade: "D", label: "Poor", color: "orange-500", hex: "#f97316" },
+    e: { grade: "E", label: "Very Poor", color: "red-600", hex: "#dc2626" },
+    unknown: { grade: "?", label: "Unknown", color: "gray-400", hex: "" }
+};
 const MAX_ADDITIVE_POINTS = 30;
 const ORGANIC_BONUS = 10;
 const HAZARD_CAP = 49;
@@ -147,13 +156,21 @@ export class ProductAnalysis {
     }
 
     get rating(): Rating {
+        // In Nutri-Score mode the displayed grade is the published grade, so the
+        // star rating is derived from it directly. Deriving it from the 0-100
+        // projection instead would mislabel grades C and D, because that
+        // projection is not evenly spaced.
+        if (this.#scoreFunction !== "app") {
+            return RATING_BY_GRADE[this.nutriscoreGrade];
+        }
+
         const s = this.score;
         if (s >= 90) return { grade: "A", label: "Excellent", color: "green-600", hex: "#16a34a" };
-        if (s >= 75) return { grade: "B", label: "Good", color: "green-400", hex: "#4ade80" };
+        if (s >= 75) return { grade: "B", label: "Good", color: "green-500", hex: "#22c55e" };
         if (s >= 60) return { grade: "C", label: "Mediocre", color: "yellow-500", hex: "#eab308" };
-        if (s >= 45) return { grade: "D", label: "Poor", color: "orange-600", hex: "#dc2626" };
+        if (s >= 45) return { grade: "D", label: "Poor", color: "orange-500", hex: "#f97316" };
         if (s > 0) return { grade: "E", label: "Very Poor", color: "red-600", hex: "#dc2626" };
-        return { grade: "?", label: "Unknown", color: "grey-200", hex: "" };
+        return { grade: "?", label: "Unknown", color: "gray-400", hex: "" };
     }
 
     get nutrients(): NutrientRow[] {

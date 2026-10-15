@@ -17,7 +17,7 @@
         3: 'bg-red-100 text-red-700 border-red-200',
         2: 'bg-orange-100 text-orange-700 border-orange-200',
         1: 'bg-yellow-100 text-yellow-700 border-yellow-200',
-        0: 'bg-base-200 text-base-500 border-transparent'
+        0: 'bg-base-200 text-base-content/70 border-base-300'
     };
 </script>
 
