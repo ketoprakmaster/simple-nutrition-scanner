@@ -45,11 +45,18 @@ registerRoute(new NavigationRoute(
 ));
 
 // Cache API calls
+// The cache key keeps cached responses in their own URL namespace. Without it
+// workbox keys a response by the original request URL, so an image request that
+// happens to share the API URL would be served the cached JSON as image bytes.
 registerRoute(
 	({ url }) => url.origin === 'https://world.openfoodfacts.org',
 	new StaleWhileRevalidate({
 		cacheName: 'food-api-cache',
 		plugins: [
+			{
+				cacheKeyWillBeUsed: async ({ request }) =>
+					new Request(`https://off-cache.local/api/${encodeURIComponent(request.url)}`)
+			},
 			new ExpirationPlugin({
 				maxEntries: 50,
 				maxAgeSeconds:  24 * 60 * 60, // 1 day
@@ -64,6 +71,10 @@ registerRoute(
 	new CacheFirst({
 		cacheName: 'food-images-cache',
 		plugins: [
+			{
+				cacheKeyWillBeUsed: async ({ request }) =>
+					new Request(`https://off-cache.local/image/${encodeURIComponent(request.url)}`)
+			},
 			new ExpirationPlugin({
 				maxEntries: 50,
 				maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
@@ -78,6 +89,10 @@ registerRoute(
 	new CacheFirst({
 		cacheName: 'off-static-assets',
 		plugins: [
+			{
+				cacheKeyWillBeUsed: async ({ request }) =>
+					new Request(`https://off-cache.local/static/${encodeURIComponent(request.url)}`)
+			},
 			new ExpirationPlugin({
 				maxEntries: 50,
 				maxAgeSeconds: 60 * 60 * 24 * 90, // 90 Days
