@@ -2,9 +2,10 @@
     import { ui } from '$lib/ui/alert.svelte';
     import { fly } from 'svelte/transition';
     import { flip } from 'svelte/animate';
-    import { Ban, TriangleAlert, Info, Check, CircleX, type Icon as IconType } from '@lucide/svelte'
+    import { Ban, TriangleAlert, Info, Check, CircleX } from '@lucide/svelte'
+    import type { IconComponent } from '$lib/types/icon';
 
-    const icons: Record<string, typeof IconType> = {
+    const icons: Record<string, IconComponent> = {
         success: Check,
         error: Ban,
         warning: TriangleAlert,

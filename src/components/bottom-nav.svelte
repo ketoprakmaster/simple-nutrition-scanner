@@ -2,13 +2,14 @@
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { checkActive } from '$lib/utils/helpers/navigation';
-  import { Camera, History, Settings, type Icon as IconType } from '@lucide/svelte';
+  import { Camera, History, Settings } from '@lucide/svelte';
+  import type { IconComponent } from '$lib/types/icon';
 
   type NavItems = {
       label: string,
       path: "/settings" | "/history/[code]" | string,
       isCenter?: boolean
-      icon?: typeof IconType
+      icon?: IconComponent
   }
 
   const navItems : NavItems[] = [
