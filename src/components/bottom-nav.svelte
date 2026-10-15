@@ -5,18 +5,22 @@
   import { Camera, History, Settings } from '@lucide/svelte';
   import type { IconComponent } from '$lib/types/icon';
 
+  // `resolve` is typed against the generated route union, so the paths have to
+  // keep their literal types instead of widening to `string`.
+  type RoutePath = '/' | '/scan' | '/history' | '/settings';
+
   type NavItems = {
       label: string,
-      path: "/settings" | "/history/[code]" | string,
+      path: RoutePath,
       isCenter?: boolean
       icon?: IconComponent
   }
 
-  const navItems : NavItems[] = [
+  const navItems: NavItems[] = [
     { label: 'History', path: '/history', icon: History },
     { label: 'Scan', path: '/scan', isCenter: true },
-    { label: 'Settings', path: '/settings', icon: Settings  }
-  ] as const;
+    { label: 'Settings', path: '/settings', icon: Settings }
+  ];
 
   // Derived index for the sliding logic
   const activeIndex = $derived(navItems.findIndex(item => checkActive(item.path)));
