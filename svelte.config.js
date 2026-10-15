@@ -12,7 +12,7 @@ const config = {
         }),
 
 		output: {
-		    bundleStrategy: 'single'
+		    bundleStrategy: 'split'
 		},
 
         paths: {
