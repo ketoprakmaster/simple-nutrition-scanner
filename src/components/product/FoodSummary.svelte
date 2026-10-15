@@ -1,11 +1,14 @@
 <script lang="ts">
     import type { Product } from "$lib/types/product";
     import { labelIcons } from "$lib/utils/helpers/labels";
+    import { ratingClasses } from "$lib/utils/helpers/ratingClasses";
     import {ProductAnalysis} from "$lib/models/productAnalysis";
 
     type Props = {item: Product, analysis: ProductAnalysis};
 
     let { item, analysis } : Props = $props()
+
+    const tone = $derived(ratingClasses(analysis.rating));
 </script>
 
 
@@ -45,9 +48,10 @@
         <!-- score circle -->
         <div class="flex items-center gap-6">
 	        <div
-						class="radial-progress border-8 border-base-300 text-{analysis.rating.color}"
+						class="radial-progress border-8 border-base-content/10 {tone.ring}"
 						style="--value:{analysis.score}; --size:6rem; --thickness: 0.5rem;"
 						role="progressbar"
+						aria-label="Score {analysis.score} out of 100, grade {analysis.rating.grade}"
 					>
 						<span class="text-4xl font-black">{analysis.score}</span>
             </div>
@@ -58,7 +62,7 @@
                     <span class="text-3xl font-black">{analysis.calories.available ? analysis.calories.value : "N/A"}</span>
                     <span class="text-sm font-bold opacity-60">{analysis.calories.unit}</span>
                 </div>
-                <span class="text-lg font-medium text-{analysis.rating.color}">{analysis.rating.label} Score</span>
+                <span class="text-lg font-medium {tone.text}">{analysis.rating.label} Score</span>
             </div>
         </div>
     </div>

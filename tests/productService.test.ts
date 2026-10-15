@@ -56,6 +56,31 @@ describe("ProductService ingestion", () => {
         expect(rows.get("3017620422003")?.product.product_name).toBe("Nutella");
     });
 
+    it("stamps the scan time so history can order by recency", async () => {
+        const { service, rows } = serviceWith(jsonResponse(nutella));
+        const before = Date.now();
+
+        await service.lookup("3017620422003");
+
+        const scannedAt = rows.get("3017620422003")?.scannedAt;
+
+        expect(scannedAt).toBeGreaterThanOrEqual(before);
+        expect(scannedAt).toBeLessThanOrEqual(Date.now());
+    });
+
+    it("leaves a cached row untouched, so its original scan time survives", async () => {
+        const stored = nutella.product as unknown as Product["product"];
+        const { service, store } = serviceWith(jsonResponse(nutella), {
+            code: "3017620422003",
+            product: stored,
+            scannedAt: 123
+        });
+
+        await service.lookup("3017620422003");
+
+        expect(store.add).not.toHaveBeenCalled();
+    });
+
     it("trims the scanned code before using it", async () => {
         const { service } = serviceWith(jsonResponse(nutella));
 

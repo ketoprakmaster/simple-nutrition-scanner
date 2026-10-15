@@ -16,13 +16,17 @@
     import CircleArrowLeft from '@lucide/svelte/icons/circle-arrow-left';
     import { onMount } from 'svelte';
 
+    // `current` keeps the previously viewed product around between routes, so the
+    // page clears it before each load instead of rendering the wrong product.
     onMount(() => {
-        const id = page.params.id;
-        if (id) productStore.ensure(id);
+        const code = page.params.id;
+        productStore.current = undefined;
+        productStore.ensure(code);
     });
 
     const item = $derived(productStore.current);
     const analysis = $derived(new ProductAnalysis(item));
+    const title = $derived(item?.product.product_name?.trim() || 'Product Detail');
 </script>
 
 <div class="mx-auto min-h-screen bg-base-300 pb-24">
@@ -31,7 +35,7 @@
         <div class="btn btn-ghost btn-circle btn-md" aria-label="go to history">
             <CircleArrowLeft/>
         </div>
-        <span class="ml-2 font-semibold truncate max-w-md">{item?.product.product_name || 'Product Detail'}</span>
+        <span class="ml-2 font-semibold truncate max-w-md">{title}</span>
     </a>
 
     {#if item}
@@ -57,7 +61,8 @@
         <div class="p-10 text-center">
             <div class="bg-error/10 text-error p-6 rounded-xl mb-4">
                 <TriangleAlert class="h-12 w-12 mx-auto mb-2"/>
-                <p class="font-bold">Product not found</p>
+                <p class="font-bold">{productStore.currentError || 'Product not found'}</p>
+                <p class="text-xs opacity-70 mt-1">Barcode {page.params.id}</p>
             </div>
             <button onclick={() => goto(resolve('/history'))} class="btn btn-primary rounded-full px-8">Return to History</button>
         </div>

@@ -69,7 +69,7 @@ export class ProductService {
                     return { type: "error", message: "Unexpected response from Open Food Facts" };
 
                 case "product":
-                    await this.#repo.add(outcome.product);
+                    await this.#repo.add({ ...outcome.product, scannedAt: Date.now() });
                     return { type: "found", code: outcome.product.code, fromCache: false };
             }
         } catch (err) {

@@ -1,5 +1,6 @@
 import { db } from "$lib/config/database";
 import type { Product } from "$lib/types/product";
+import { newestFirst } from "$lib/utils/helpers/productOrder";
 import { liveQuery } from "dexie";
 
 export class ProductRepository {
@@ -25,7 +26,7 @@ export class ProductRepository {
 
     stream() {
         return liveQuery(() =>
-            db.products.reverse().toArray(),
+            db.products.toArray().then(newestFirst),
         );
     }
 }

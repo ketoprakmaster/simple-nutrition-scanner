@@ -3,6 +3,7 @@
     import { productStore } from '$lib/ui/product.svelte';
     import { resolve } from "$app/paths";
     import { ProductAnalysis } from '$lib/models/productAnalysis';
+    import { ratingClasses } from '$lib/utils/helpers/ratingClasses';
 
     type Props = {
       items: Product[];
@@ -32,6 +33,7 @@
   <div class="flex flex-col gap-4">
     {#each items as item (item.code)}
     {@const info = new ProductAnalysis(item)}
+    {@const tone = ratingClasses(info.rating)}
       <a
         href={resolve(`/history/${item.code}`)}
         class="group relative flex items-center bg-base-200/50 rounded-xl p-4 shadow-sm border border-base-300 active:scale-[0.98] transition-all hover:border-primary/25 hover:shadow-md"
@@ -52,13 +54,13 @@
             {info.brands}
           </p>
           <div class="flex items-center gap-1 mt-1">
-             <div class="w-2 h-2 rounded-full {info.rating.color}"></div>
+             <div class="w-2 h-2 rounded-full {tone.dot}"></div>
              <span class="text-[10px] font-bold uppercase opacity-60 tracking-wider">Score: {info.rating.label }</span>
           </div>
         </div>
 
         <div class="flex items-center gap-2">
-          <div class="radial-progress border-4 border-base-300 text-{info.rating.color}" style="--value:{info.score}; --size:2.5rem; --thickness: 4px;" role="progressbar">
+          <div class="radial-progress border-4 border-base-content/10 {tone.ring}" style="--value:{info.score}; --size:2.5rem; --thickness: 4px;" role="progressbar" aria-label="Score {info.score} out of 100, grade {info.rating.grade}">
             <span class="text-[10px] font-black text-base-content">{info.rating.grade}</span>
           </div>
 
