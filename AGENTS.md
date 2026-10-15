@@ -54,6 +54,39 @@ bunx vitest run --exclude '**/*.live.test.ts'
 - `npm run check` reports one pre-existing error in `src/components/bottom-nav.svelte`
   (`resolve(item.path)` with a widened `string`); unrelated to the test setup
 
+### Held-back major upgrades
+
+Dependencies are on the latest **within-major** versions. These majors are
+deliberately not adopted, because they are inseparable from a SvelteKit 3
+migration rather than a version bump:
+
+| Package | Current | Latest | Blocked by |
+|---|---|---|---|
+| `typescript` | 5.9.3 | 7.0.2 | No current SvelteKit or `svelte-check` release accepts TS 7 |
+| `vite` | 7.3.7 | 8.3.4 | Required only for the SvelteKit 3 tier |
+| `@sveltejs/kit` | 2.70.3 | 3.1.0 | See migration notes below |
+| `@sveltejs/vite-plugin-svelte` | 6.2.4 | 7.3.1 | v7 requires Vite 8 |
+| `@sveltejs/adapter-static` / `adapter-auto` | 3.0.10 / 7.0.1 | 4.0.0 / 8.0.0 | Require SvelteKit 3 |
+
+Note that `svelte-check` and `@sveltejs/kit` both cap their TypeScript peer
+range at `^6.0.0`, and TypeScript 6 is still only a beta — so even the
+SvelteKit 3 tier cannot use stable TypeScript 7 today.
+
+**Migrating to SvelteKit 3 is a code migration, not a bump.** Per the
+[official guide](https://svelte.dev/docs/kit/migrating-to-sveltekit-3) it requires:
+
+1. Deleting `svelte.config.js` — configuration moves into the `sveltekit()`
+   Vite plugin, including the `$components` alias.
+2. The `$lib` alias is no longer generated; it becomes a `#lib` subpath import
+   declared in `package.json` `imports`. This renames `$lib` → `#lib` **and
+   requires explicit `.js` extensions**, touching nearly every file.
+3. `$app/environment` → `$app/env`; `$app/stores` and `$service-worker` removed.
+4. Minimum Node 22.17, Svelte 5.57.1, Vite 8.0.12, TypeScript 6.
+5. Then `npx sv migrate sveltekit-3` for the remainder.
+
+`vitest.config.ts` and the `$lib` imports inside `tests/` must be updated as
+part of step 2.
+
 ---
 
 ## Code Style Guidelines
