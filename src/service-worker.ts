@@ -22,16 +22,17 @@ const IGNORED_FILES = [
 ];
 
 // define static assets
+const isIgnored = (file: string) => IGNORED_FILES.some(ignored => file.endsWith(ignored));
+
+// Vite fingerprints every file it emits, so a `build` URL already *is* its
+// revision. Attaching the build id to those as well gives a byte-identical
+// bundle a brand new cache key on every deploy, which forces every client to
+// re-download it. The static and prerendered files keep stable URLs, so they
+// still need the build id so a content change invalidates them.
 const manifest = [
-	...build,
-	...files,
-	...prerendered
-]
-.filter((file) => !IGNORED_FILES.some(ignored => file.endsWith(ignored)))
-.map((url) => ({
-	url,
-	revision: version
-}));
+	...build.filter((file) => !isIgnored(file)).map((url) => ({ url })),
+	...[...files, ...prerendered].filter((file) => !isIgnored(file)).map((url) => ({ url, revision: version }))
+];
 
 // Precache all static assets
 precacheAndRoute(manifest);
